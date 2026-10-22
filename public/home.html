@@ -18,6 +18,7 @@ html,body{margin:0;background:#0d0d0d;color:#a8a8a8;font:12px/1.6 'Geist Pixel',
 #stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
 header b{font-weight:400;color:#fff;font-size:14px}
+.hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
 main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .hero{position:fixed;inset:0;z-index:1;height:100vh;display:flex;flex-direction:column}
 .hero .foot{margin-top:auto}
@@ -45,7 +46,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
 </head>
 <body>
-<header><b>SMAIL SMAJKIC</b><span>PRODUCT DESIGN AND BRAND.</span></header>
+<header><b>SMAIL SMAJKIC</b><span class="words"><span class="hw" data-m="0">PRODUCT</span> <span class="hw" data-m="1">DESIGN</span> AND <span class="hw" data-m="2">BRAND</span>.</span></header>
 <canvas id="stage"></canvas>
 <div class="hero">
 <footer class="foot">
@@ -222,7 +223,7 @@ function cubeGeo(N) {
 const geoCoarse = null, geoDense = cubeGeo(150);
 
 // ---------- material: obsidian, deformation and micro surface in the shader ----------
-const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 }, uEng: { value: null }, uEngOn: { value: 0 }, uNM: { value: new THREE.Matrix3() } };
+const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 }, uEng: { value: null }, uEngOn: { value: 0 }, uNM: { value: new THREE.Matrix3() }, uMorph: { value: new THREE.Vector3() }, uMSign: { value: new THREE.Vector3(1, 1, 1) }, uTime: { value: 0 } };
 const mat = new THREE.MeshPhysicalMaterial({ color: 0x15161a, metalness: 1, roughness: 0.015, clearcoat: 1, clearcoatRoughness: 0.005, envMapIntensity: 1.9 });
 const NOISE = `
 float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
@@ -265,17 +266,30 @@ mat.onBeforeCompile = sh => {
   Object.assign(sh.uniforms, U);
   sh.vertexShader = sh.vertexShader
     .replace('#include <common>', `#include <common>
-uniform float uPhase,uWave,uAmp,uMode,uH,uFine; varying vec3 vObj;
+uniform float uPhase,uWave,uAmp,uMode,uH,uFine,uTime; uniform vec3 uMorph,uMSign; varying vec3 vObj;
+// the whole cube turns into its discipline: product an app tile, design a sphere, brand a coin
+vec3 shapeT(vec3 p,float k){
+  vec3 d=normalize(p);
+  if(k>.5&&k<1.5)return d*.98;
+  if(k<.5){vec3 a=abs(d);float e=5.;float r=pow(pow(a.x,e)+pow(a.y,e)+pow(a.z,e),-1./e);return d*r*vec3(.22,.95,.95);}
+  float e=12.;float r=pow(pow(length(d.xz),e)+pow(abs(d.y),e),-1./e);return d*r*vec3(1.05,.09,1.05);}
 float cwf(vec3 p){vec3 a=abs(p/uH);float mx=max(a.x,max(a.y,a.z)),mn=min(a.x,min(a.y,a.z)),md=a.x+a.y+a.z-mx-mn;return max(0.,1.-mn*mn)*max(0.,1.-md*md);}
 vec3 disp(vec3 p,vec3 n){
   float waves=sin(p.x*2.3+uWave*.9)*sin(p.y*2.7-uWave*.7)*sin(p.z*2.1+uWave*.55)+.5*uFine*sin(p.x*4.1-p.y*3.3+uWave*1.3)*sin(p.z*3.7+uWave*.8);
   float mono=cwf(p)*sin(uPhase);
-  return p+n*mix(waves*.075,mono*.16,uMode)*uAmp;}`)
+  vec3 q=p+n*mix(waves*.075,mono*.16,uMode)*uAmp;
+  vec3 mc=clamp(uMorph,0.,1.);
+  q=mix(q,shapeT(p,0.)+normalize(p)*mono*.02,mc.x);
+  q=mix(q,shapeT(p,1.),mc.y);
+  q=mix(q,shapeT(p,2.)+normalize(p)*mono*.02,mc.z);
+  // the spring's overshoot swells the shape instead of pulling the cube back through it
+  vec3 ov=uMorph-mc;return q*(1.+(ov.x+ov.y+ov.z)*.6);}`)
     .replace('#include <beginnormal_vertex>', `vec3 objectNormal;{
   vec3 n=normalize(normal);vec3 a=abs(n.y)<.99?vec3(0,1,0):vec3(1,0,0);
   vec3 t1=normalize(cross(n,a)),t2=cross(n,t1);float e=.004;
   vec3 p0=disp(position,n),p1=disp(position+t1*e,n),p2=disp(position+t2*e,n);
-  objectNormal=normalize(cross(p1-p0,p2-p0));if(dot(objectNormal,n)<0.)objectNormal=-objectNormal;}`)
+  objectNormal=normalize(cross(p1-p0,p2-p0));if(dot(objectNormal,n)<0.)objectNormal=-objectNormal;
+  objectNormal=normalize(mix(objectNormal,normalize(p0),clamp(uMorph.y,0.,1.)));}`)
     .replace('#include <begin_vertex>', 'vec3 transformed=disp(position,normalize(normal));vObj=position;');
   sh.fragmentShader = sh.fragmentShader
     .replace('#include <common>', '#include <common>\nuniform float uMicro; varying vec3 vObj;' + NOISE + ENGRAVE)
@@ -285,6 +299,22 @@ vec3 disp(vec3 p,vec3 n){
     .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+uMicro*.14*smoothstep(.5,.85,vn3(vObj*2.4+3.1)),0.,1.);\n#endif');
 };
 
+const morphState = { idx: -1, sign: 1, until: 0, hold: qs.has('morph') ? +qs.get('morph') : -1, word: -1, cycle: -1, vel: [0, 0, 0], focus: 0 };
+const _inv = new THREE.Matrix4(), _cl = new THREE.Vector3();
+function facing() {
+  _inv.copy(cube.matrixWorld).invert();
+  _cl.copy(cam.position).applyMatrix4(_inv).normalize();
+  const ax = Math.abs(_cl.x), ay = Math.abs(_cl.y), az = Math.abs(_cl.z);
+  if (ax >= ay && ax >= az) return [0, Math.sign(_cl.x)];
+  if (az >= ay) return [1, Math.sign(_cl.z)];
+  return [2, Math.sign(_cl.y)];
+}
+function triggerMorph() {
+  if (t < morphState.until - 0.6) return;
+  const [i, sg] = facing();
+  morphState.idx = i; morphState.sign = sg; morphState.until = t + 2.4;
+  U.uMSign.value.setComponent(i, sg);
+}
 const cube = new THREE.Mesh(geoDense, mat);
 cube.onBeforeRender = (rr, ss, c) => { _mv.multiplyMatrices(c.matrixWorldInverse, cube.matrixWorld); U.uNM.value.getNormalMatrix(_mv); };
 drawEngrave();
@@ -376,7 +406,25 @@ window.__frostReady = true;
 setFrost();
 requestAnimationFrame(frostFrame);
 
-let prev = 0, t = 0, proxS = 0;
+let prev = 0, t = 0, proxS = 0, proxWas = 0;
+const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
+const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion();
+const _tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.28, -0.38, 0));
+const _up = new THREE.Vector3(0, 1, 0), _flat = new THREE.Vector3(0, 0.9, 0.44).normalize(), _spin = new THREE.Quaternion();
+// the header words aim the morph; a click or tap on the cube steps through the three shapes
+const hws = [...document.querySelectorAll('.hw')];
+function markWords() { hws.forEach(h => h.classList.toggle('on', +h.dataset.m === morphState.idx && t < morphState.until)); }
+hws.forEach(h => {
+  const i = +h.dataset.m;
+  h.addEventListener('pointerenter', () => { morphState.word = i; morphState.idx = i; morphState.until = t + 1.5; });
+  h.addEventListener('pointerleave', () => { if (morphState.word === i) morphState.word = -1; });
+  h.addEventListener('click', () => { morphState.idx = i; morphState.until = t + 3; });
+});
+addEventListener('pointerdown', e => {
+  if (scrollY > innerHeight * 0.3 || e.target.closest('a,button,.hw,header')) return;
+  morphState.cycle = (morphState.cycle + 1) % 4;
+  if (morphState.cycle === 3) { morphState.until = 0; } else { morphState.idx = morphState.cycle; morphState.until = t + 4; }
+});
 r.setAnimationLoop(ms => {
   const dt = Math.min(0.05, (ms - prev) / 1000); prev = ms;
   if (reduced) { composer.render(); return; }
@@ -390,9 +438,28 @@ r.setAnimationLoop(ms => {
   U.uWave.value += rate * dt;
   U.uAmp.value = 1 + 0.35 * proxS;
   U.uMode.value += (mode - U.uMode.value) * 0.06;
+  U.uTime.value = t;
+  // hovering over the cube keeps the facing side transformed, leaving lets it flow back
+  if (morphState.word >= 0) { morphState.idx = morphState.word; morphState.until = t + 1.5; }
+  proxWas = prox;
+  if (morphState.hold >= 0) { morphState.idx = morphState.hold; morphState.until = t + 1; }
+  // a spring, so the metal overshoots its new shape a little and settles
+  let active = false;
+  for (let i = 0; i < 3; i++) {
+    const target = i === morphState.idx && t < morphState.until ? 1 : 0;
+    if (target) active = true;
+    const cur = U.uMorph.value.getComponent(i);
+    morphState.vel[i] = (morphState.vel[i] + (target - cur) * 0.018) * 0.88;
+    U.uMorph.value.setComponent(i, Math.min(1.12, Math.max(-0.08, cur + morphState.vel[i])));
+  }
+  morphState.focus += ((active ? 1 : 0) - morphState.focus) * 0.05;
+  markWords();
 
   if (qs.has('face')) {
-    cube.rotation.set(0, 0.0001, 0);
+    const f = qs.get('face');
+    if (f === 'product') cube.rotation.set(0.35, -Math.PI / 2 + 0.45, 0);
+    else if (f === 'brand') cube.rotation.set(Math.PI / 2 - 0.35, 0.45, 0);
+    else cube.rotation.set(0.35, -0.45, 0);
   } else if (on.drift) {
     holder.position.y = Math.sin(t * 0.5) * 0.1;
     cube.rotation.set(
@@ -402,6 +469,14 @@ r.setAnimationLoop(ms => {
   } else {
     holder.position.y = Math.sin(t * 0.6) * 0.08;
     cube.rotation.set(0.62 + Math.sin(t * 0.13) * 0.25 + cy * 0.4, t * 0.11 + cx * 0.8, 0.18 + Math.sin(t * 0.09) * 0.1);
+  }
+  if (morphState.focus > 0.001 && morphState.idx >= 0) {
+    _qd.copy(cube.quaternion);
+    if (morphState.idx === 2) {
+      // the coin lies flat, tipped a little toward the viewer, and turns slowly like one set down on a table
+      _qt.setFromUnitVectors(AXES[2], _flat).premultiply(_spin.setFromAxisAngle(_up, t * 0.25));
+    } else _qt.setFromUnitVectors(AXES[morphState.idx], _fwd).premultiply(_tilt);
+    cube.quaternion.slerpQuaternions(_qd, _qt, morphState.focus * morphState.focus * (3 - 2 * morphState.focus));
   }
   scene.environmentRotation.y = cx * 0.9;
   composer.render();
