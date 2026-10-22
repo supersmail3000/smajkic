@@ -9,20 +9,20 @@
 <meta property="og:description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
 <meta property="og:url" content="https://smailsmajkic.com">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#1a1a1a">
+<meta name="theme-color" content="#030303">
 <meta name="description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
 <style>
 @font-face{font-family:'Geist';font-weight:300;src:url(/fonts/Geist-Light.woff2) format('woff2');font-display:swap}
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
-html,body{margin:0;background:#1b1b1b;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
+html,body{margin:0;background:var(--paper,#030303);color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 #stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0;background:transparent}
 /* the paper: anthracite board, light falling in from the upper left, a fine grain */
 .paper{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
   url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),
-  radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.09),rgba(255,255,255,0) 55%),
-  radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.55),rgba(0,0,0,0) 70%),
-  linear-gradient(160deg,#262626 0%,#1c1c1c 45%,#121212 100%)}
+  radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.045),rgba(255,255,255,0) 55%),
+  radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),
+  var(--paper,#030303)}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
 header b{font-weight:400;color:#fff;font-size:14px}
 .hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
@@ -46,7 +46,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
-.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:11px 22px 9px;background:#000;box-shadow:inset 0 4px 7px #000,inset 0 1px 0 #000,inset 0 -1px 0 rgba(255,255,255,.1)}
+.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:11px 22px 9px;background:linear-gradient(#1d1d1d,#2a2a2a);box-shadow:inset 0 2px 0 #000,inset 0 7px 9px -2px rgba(0,0,0,.95),inset 0 -1px 0 rgba(255,255,255,.12)}
 /* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
 .cta span{background:linear-gradient(180deg,#ffffff 0%,#ececec 44%,#a4a4a4 54%,#e2e2e2 100%);-webkit-background-clip:text;background-clip:text;color:transparent;transition:filter .5s}
 /* clean chrome on small type: bright silver with one soft horizon, no dark band */
@@ -95,6 +95,7 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const qs = new URLSearchParams(location.search);
+{ const k = +(qs.get('k') || 99); const v = Math.round((100 - k) / 100 * 255).toString(16).padStart(2, '0'); document.documentElement.style.setProperty('--paper', '#' + v + v + v); }
 const off = (qs.get('off') || '').split(',');
 const on = { page: true, hdri: true, micro: true, react: true, drift: true, calm: false, glass: true };
 for (const k of Object.keys(on)) if (off.includes(k)) on[k] = false;
