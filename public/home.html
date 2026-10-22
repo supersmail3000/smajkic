@@ -142,10 +142,13 @@ async function drawPage() {
   const g = pageCanvas.getContext('2d');
   g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 1024);
   g.textAlign = 'center'; g.fillStyle = '#fff';
-  g.font = "200px 'Geist Pixel'";
-  for (const y of [230, 520, 810]) g.fillText('SMAIL SMAJKIC', 1024, y);
-  g.font = "84px 'Geist Pixel'"; g.fillStyle = '#b0b0b0';
-  for (const y of [345, 635, 925]) g.fillText('PRODUCT DESIGN AND BRAND.', 1024, y);
+  g.font = "230px 'Geist Pixel'";
+  g.fillText('SMAIL SMAJKIC', 1024, 270);
+  g.font = "96px 'Geist Pixel'"; g.fillStyle = '#c8c8c8';
+  g.fillText('PRODUCT DESIGN AND BRAND.', 1024, 420);
+  g.fillText('FIND THE PROBLEM. SHAPE THE PRODUCT.', 1024, 640);
+  g.fillText('BUILD THE BRAND.', 1024, 760);
+  g.fillStyle = '#fff'; g.fillText('WORK WITH ME.', 1024, 940);
   pageTex.needsUpdate = true;
   return;
   g.textAlign = 'left'; g.font = "54px 'Geist Pixel'";
@@ -182,7 +185,13 @@ function envFor(hdri, page) {
   softbox(env, 14, 0.5, [0, -1.2, -10], 12);
   softbox(env, 0.5, 10, [-7, 0, -8], 9);
   softbox(env, 0.5, 10, [7, 0, -8], 9);
-  if (page) softbox(env, 26, 13, [0, 0.5, 5.5], 13, pageTex);
+  if (page) {
+    // the page wraps the cube: in front, both sides and above, so a turned face still catches it
+    softbox(env, 24, 12, [0, 0.5, 5.5], 10, pageTex);
+    softbox(env, 20, 10, [-6.5, 0.5, 1], 7, pageTex);
+    softbox(env, 20, 10, [6.5, 0.5, 1], 7, pageTex);
+    softbox(env, 18, 9, [0, 6.5, 2], 5, pageTex);
+  }
   const tex = pmrem.fromScene(env, 0, 0.1, 100, { size: 1024 }).texture;
   envCache.set(key, tex);
   return tex;
