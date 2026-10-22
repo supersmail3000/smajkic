@@ -14,8 +14,15 @@
 <style>
 @font-face{font-family:'Geist';font-weight:300;src:url(/fonts/Geist-Light.woff2) format('woff2');font-display:swap}
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
-html,body{margin:0;background:#1a1a1a;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
-#stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0}
+html,body{margin:0;background:#1b1b1b;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
+#stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0;background:transparent}
+/* the paper: anthracite board, light falling in from the upper left, a fine grain */
+.paper{position:fixed;inset:0;z-index:-1;pointer-events:none;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),
+  radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.09),rgba(255,255,255,0) 55%),
+  radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.55),rgba(0,0,0,0) 70%),
+  linear-gradient(160deg,#262626 0%,#1c1c1c 45%,#121212 100%)}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
 header b{font-weight:400;color:#fff;font-size:14px}
 .hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
@@ -51,6 +58,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 </head>
 <body>
 <header><b>SMAIL SMAJKIC</b><span class="words"><span class="hw" data-m="0">PRODUCT</span>. <span class="hw" data-m="1">DESIGN</span>. <span class="hw" data-m="2">BRAND</span>.</span></header>
+<div class="paper"></div>
 <canvas id="stage"></canvas>
 <div class="hero">
 <footer class="foot">
@@ -85,10 +93,6 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 
 const qs = new URLSearchParams(location.search);
 const off = (qs.get('off') || '').split(',');
@@ -98,15 +102,16 @@ if ((qs.get('on') || '').split(',').includes('calm')) on.calm = true;
 let mode = qs.get('m') === '1' ? 1 : 0;
 
 const cv = document.getElementById('stage');
-const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+r.setClearColor(0x000000, 0);
 r.setPixelRatio(Math.min(2, devicePixelRatio));
 r.toneMapping = THREE.ACESFilmicToneMapping;
 r.toneMappingExposure = 0.9;
 r.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
-// anthracite paper: this linear value lands on #1a1a1a after the aces curve at exposure 0.9
-scene.background = new THREE.Color().setRGB(0.0277, 0.0277, 0.0277);
+// the canvas stays transparent, the paper underneath is css
+scene.background = null;
 const cam = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
 cam.position.set(0, 0, 12.5);
 
@@ -329,13 +334,9 @@ const holder = new THREE.Group();
 holder.add(cube);
 scene.add(holder);
 
-const composer = new EffectComposer(r);
-composer.addPass(new RenderPass(scene, cam));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.12, 0.4, 0.97));
-composer.addPass(new OutputPass());
 function size() {
   const w = cv.clientWidth, h = cv.clientHeight;
-  r.setSize(w, h, false); composer.setSize(w, h);
+  r.setSize(w, h, false);
   cam.aspect = w / h;
   // portrait screens: pull the camera back so the cube keeps to about 40 % of the width
   cam.position.z = 12.5 * Math.max(1, 1.05 / cam.aspect);
@@ -434,7 +435,7 @@ addEventListener('pointerdown', e => {
 });
 r.setAnimationLoop(ms => {
   const dt = Math.min(0.05, (ms - prev) / 1000); prev = ms;
-  if (reduced) { composer.render(); return; }
+  if (reduced) { r.render(scene, cam); return; }
   t += dt;
   cx += (px - cx) * 0.04; cy += (py - cy) * 0.04;
   scrollV *= 0.9;
@@ -506,7 +507,7 @@ r.setAnimationLoop(ms => {
     holder.position.y += f * f * (3 - 2 * f) * 0.42 * half;
   }
   scene.environmentRotation.y = cx * 0.9;
-  composer.render();
+  r.render(scene, cam);
 });
 </script>
 </body>
