@@ -254,7 +254,10 @@ composer.addPass(new OutputPass());
 function size() {
   const w = cv.clientWidth, h = cv.clientHeight;
   r.setSize(w, h, false); composer.setSize(w, h);
-  cam.aspect = w / h; cam.updateProjectionMatrix();
+  cam.aspect = w / h;
+  // portrait screens: pull the camera back so the cube keeps to about 40 % of the width
+  cam.position.z = 12.5 * Math.max(1, 1.05 / cam.aspect);
+  cam.updateProjectionMatrix();
 }
 size(); addEventListener('resize', size);
 
