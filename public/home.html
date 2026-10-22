@@ -246,9 +246,16 @@ async function drawEngrave() {
   const c = document.createElement('canvas'); c.width = 1024; c.height = 3072;
   const g = c.getContext('2d');
   g.fillStyle = '#000'; g.fillRect(0, 0, 1024, 3072);
-  g.filter = 'blur(2px)'; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.font = "300 124px 'Geist'";
-  ['PRODUCT', 'DESIGN', 'BRAND'].forEach((w, i) => g.fillText(w, 512, i * 1024 + 512));
+  g.filter = 'blur(1.5px)'; g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = "300 64px 'Geist'"; g.textAlign = 'left';
+  // wide tracking, set by hand so every browser spaces it the same
+  const track = 64 * 0.35;
+  ['PRODUCT', 'DESIGN', 'BRAND'].forEach((w, i) => {
+    const widths = [...w].map(ch => g.measureText(ch).width);
+    const total = widths.reduce((a, b) => a + b, 0) + track * (w.length - 1);
+    let x = 512 - total / 2;
+    [...w].forEach((ch, j) => { g.fillText(ch, x, i * 1024 + 512); x += widths[j] + track; });
+  });
   const t = new THREE.CanvasTexture(c);
   t.anisotropy = 8;
   U.uEng.value = t; U.uEngOn.value = 1;
@@ -272,8 +279,8 @@ vec3 disp(vec3 p,vec3 n){
     .replace('#include <begin_vertex>', 'vec3 transformed=disp(position,normalize(normal));vObj=position;');
   sh.fragmentShader = sh.fragmentShader
     .replace('#include <common>', '#include <common>\nuniform float uMicro; varying vec3 vObj;' + NOISE + ENGRAVE)
-    .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nfloat smudge=smoothstep(.5,.85,vn3(vObj*2.4+3.1))*(.6+.4*vn3(vObj*14.));roughnessFactor=clamp(roughnessFactor+uMicro*(.16*smudge+.01*vn3(vObj*40.)),0.,1.);vec3 engR,engU;float engK;vec2 engUV=engFace(vObj,engR,engU,engK);float engM=engH(engUV,engK)*uEngOn;roughnessFactor=clamp(roughnessFactor+.12*engM,0.,1.);')
-    .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\n{float e=1./1024.;float dx=engH(engUV+vec2(e,0.),engK)-engH(engUV-vec2(e,0.),engK);float dy=engH(engUV+vec2(0.,e),engK)-engH(engUV-vec2(0.,e),engK);normal=normalize(normal+(normalize(uNM*engR)*dx+normalize(uNM*engU)*dy)*1.1*uEngOn);}')
+    .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nfloat smudge=smoothstep(.5,.85,vn3(vObj*2.4+3.1))*(.6+.4*vn3(vObj*14.));roughnessFactor=clamp(roughnessFactor+uMicro*(.16*smudge+.01*vn3(vObj*40.)),0.,1.);vec3 engR,engU;float engK;vec2 engUV=engFace(vObj,engR,engU,engK);float engM=engH(engUV,engK)*uEngOn;roughnessFactor=clamp(roughnessFactor+.06*engM,0.,1.);')
+    .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\n{float e=1./1024.;float dx=engH(engUV+vec2(e,0.),engK)-engH(engUV-vec2(e,0.),engK);float dy=engH(engUV+vec2(0.,e),engK)-engH(engUV-vec2(0.,e),engK);normal=normalize(normal+(normalize(uNM*engR)*dx+normalize(uNM*engU)*dy)*.7*uEngOn);}')
     .replace('#include <clearcoat_normal_fragment_begin>', '#include <clearcoat_normal_fragment_begin>\nclearcoatNormal=normal;')
     .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+uMicro*.14*smoothstep(.5,.85,vn3(vObj*2.4+3.1)),0.,1.);\n#endif');
 };
