@@ -283,7 +283,8 @@ vec3 disp(vec3 p,vec3 n){
   q=mix(q,shapeT(p,1.),mc.y);
   q=mix(q,shapeT(p,2.)+normalize(p)*mono*.02,mc.z);
   // the spring's overshoot swells the shape instead of pulling the cube back through it
-  vec3 ov=uMorph-mc;return q*(1.+(ov.x+ov.y+ov.z)*.6);}`)
+  vec3 ov=uMorph-mc;q*=1.+(ov.x+ov.y+ov.z)*.6;
+  return q+normalize(p)*waves*.075*max(0.,uAmp-1.35)*.6;}`)
     .replace('#include <beginnormal_vertex>', `vec3 objectNormal;{
   vec3 n=normalize(normal);vec3 a=abs(n.y)<.99?vec3(0,1,0):vec3(1,0,0);
   vec3 t1=normalize(cross(n,a)),t2=cross(n,t1);float e=.004;
@@ -449,10 +450,14 @@ r.setAnimationLoop(ms => {
     const target = i === morphState.idx && t < morphState.until ? 1 : 0;
     if (target) active = true;
     const cur = U.uMorph.value.getComponent(i);
-    morphState.vel[i] = (morphState.vel[i] + (target - cur) * 0.018) * 0.88;
+    morphState.vel[i] = (morphState.vel[i] + (target - cur) * 0.0011) * 0.945;
     U.uMorph.value.setComponent(i, Math.min(1.12, Math.max(-0.08, cur + morphState.vel[i])));
   }
-  morphState.focus += ((active ? 1 : 0) - morphState.focus) * 0.05;
+  morphState.focus += ((active ? 1 : 0) - morphState.focus) * 0.018;
+  // the metal works while it moves: ripples grow with the speed of the morph and settle with it
+  const churn = Math.abs(morphState.vel[0]) + Math.abs(morphState.vel[1]) + Math.abs(morphState.vel[2]);
+  morphState.churn = (morphState.churn || 0) + (churn - (morphState.churn || 0)) * 0.1;
+  U.uAmp.value += morphState.churn * 40;
   markWords();
 
   if (qs.has('face')) {
