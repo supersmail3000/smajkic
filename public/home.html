@@ -9,12 +9,12 @@
 <meta property="og:description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
 <meta property="og:url" content="https://smailsmajkic.com">
 <meta property="og:type" content="website">
-<meta name="theme-color" content="#0d0d0d">
+<meta name="theme-color" content="#1a1a1a">
 <meta name="description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
 <style>
 @font-face{font-family:'Geist';font-weight:300;src:url(/fonts/Geist-Light.woff2) format('woff2');font-display:swap}
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
-html,body{margin:0;background:#0d0d0d;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
+html,body{margin:0;background:#1a1a1a;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 #stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
 header b{font-weight:400;color:#fff;font-size:14px}
@@ -105,7 +105,8 @@ r.toneMappingExposure = 0.9;
 r.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0d0d0d);
+// anthracite paper: this linear value lands on #1a1a1a after the aces curve at exposure 0.9
+scene.background = new THREE.Color().setRGB(0.0277, 0.0277, 0.0277);
 const cam = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
 cam.position.set(0, 0, 12.5);
 
