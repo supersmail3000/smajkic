@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Smail Smajkic</title>
 <link rel="icon" href="/favicon.ico">
 <meta property="og:title" content="Smail Smajkic">
@@ -20,9 +20,9 @@ header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content
 header b{font-weight:400;color:#fff;font-size:14px}
 .hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
 main{max-width:640px;margin:0 auto;padding:0 28px 60px}
-.hero{position:fixed;inset:0;z-index:1;height:100vh;display:flex;flex-direction:column}
+.hero{position:fixed;inset:0;z-index:1;height:100vh;height:100svh;display:flex;flex-direction:column}
 .hero .foot{margin-top:auto}
-.sheet{position:relative;z-index:3;margin-top:100vh}
+.sheet{position:relative;z-index:3;margin-top:100vh;margin-top:100svh}
 .frost{position:fixed;inset:0;z-index:2;pointer-events:none}
 .work{padding:128px 32px 240px}
 .wh{display:flex;justify-content:space-between;color:#7d7d7d;padding-bottom:48px}
@@ -30,14 +30,14 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .work li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) 64px;gap:32px;align-items:baseline;padding:24px 0}
 .pn{color:#fff}.pd{color:#a8a8a8;max-width:600px}
 .go{color:#a8a8a8;text-decoration:none;text-align:right}.go:hover{color:#fff}
-.end{min-height:100vh;display:flex;flex-direction:column}
+.end{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 .closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:40px}
 .closer p{margin:0;max-width:880px;color:#fff;font-size:32px;line-height:1.25}
 @media (max-width:720px){.closer p{font-size:24px}.hero .foot{align-items:flex-end}}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
-.foot{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
+.foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
 .cta{flex:none;background:#050505;color:#fff;text-decoration:none;border-radius:999px;padding:8px 16px;box-shadow:inset 0 2px 3px #000,0 1px 0 #2a2a2a}
 .j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
