@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smail Smajkic</title>
+<link rel="icon" href="/favicon.ico">
+<meta property="og:title" content="Smail Smajkic">
+<meta property="og:description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
+<meta property="og:url" content="https://smailsmajkic.com">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="description" content="Product design and brand. Finding the real problem, shaping the product around it and building a brand that carries it.">
+<style>
+@font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
+html,body{margin:0;background:#0d0d0d;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:uppercase}
+#stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0}
+header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
+header b{font-weight:400;color:#fff;font-size:14px}
+main{max-width:640px;margin:0 auto;padding:0 28px 60px}
+.hero{position:fixed;inset:0;z-index:1;height:100vh;display:flex;flex-direction:column}
+.hero .foot{margin-top:auto}
+.sheet{position:relative;z-index:3;margin-top:100vh}
+.frost{position:fixed;inset:0;z-index:2;pointer-events:none}
+.work{padding:128px 32px 240px}
+.wh{display:flex;justify-content:space-between;color:#7d7d7d;padding-bottom:48px}
+.work ol{list-style:none;margin:0;padding:0}
+.work li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) 64px;gap:32px;align-items:baseline;padding:24px 0}
+.pn{color:#fff}.pd{color:#a8a8a8;max-width:600px}
+.go{color:#a8a8a8;text-decoration:none;text-align:right}.go:hover{color:#fff}
+.end{min-height:100vh;display:flex;flex-direction:column}
+.closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:40px}
+.closer p{margin:0;max-width:880px;color:#fff;font-size:32px;line-height:1.25}
+@media (max-width:720px){.closer p{font-size:24px}}
+.legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
+.legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
+@media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
+.foot{display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
+.foot .j{max-width:440px;margin:0;text-align:left}
+.cta{flex:none;background:#050505;color:#fff;text-decoration:none;border-radius:999px;padding:8px 16px;box-shadow:inset 0 2px 3px #000,0 1px 0 #2a2a2a}
+.j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
+.row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
+</style>
+<script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+</head>
+<body>
+<header><b>SMAIL SMAJKIC</b><span>PRODUCT DESIGN AND BRAND.</span></header>
+<canvas id="stage"></canvas>
+<div class="hero">
+<footer class="foot">
+  <p class="j">FIND THE PROBLEM. SHAPE THE PRODUCT. BUILD THE BRAND.</p>
+  <a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A">WORK WITH ME.</a>
+</footer>
+</div>
+<div class="frost"></div>
+<div class="sheet">
+<section class="work">
+  <div class="wh"><span>LATEST WORK</span></div>
+  <ol>
+    <li><span class="pn">BISON</span><span class="pd">DESIGN SYSTEM, PRODUCT AND BRAND FOR BÖRSE STUTTGART'S CRYPTO APP. COMPLEX, MADE SAFE TO USE.</span><a class="go" href="https://bisonapp.com" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">Siemens Healthineers</span><span class="pd">SHUI DESIGN SYSTEM. ONE UI STANDARD FOR MEDICAL SOFTWARE.</span><a class="go" href="https://www.siemens-healthineers.com" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">The Football Company</span><span class="pd">FOUNDING TEAM. PRODUCT AND BRAND FROM ZERO, THEN BRAND, CONTENT AND COMMUNICATION.</span><span class="go"></span></li>
+    <li><span class="pn">BMW</span><span class="pd">CAR CONFIGURATOR AND BMW ID. PRODUCT DESIGN ACROSS EVERY DIGITAL PLATFORM.</span><a class="go" href="https://www.bmw.com" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">Telefónica</span><span class="pd">SENIOR DESIGNER, ONE DESIGN SYSTEM. FIFTEEN BRANDS, ONE LANGUAGE.</span><a class="go" href="https://www.telefonica.de" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">Personio</span><span class="pd">DESIGN SYSTEM MANAGER. WEB COMPONENTS, GUIDELINES AND LIBRARIES.</span><a class="go" href="https://www.personio.com" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">HSE</span><span class="pd">UX LEAD FOR WEB, IOS AND ANDROID. LAUNCHED LIVE SHOPPING.</span><a class="go" href="https://www.hse.de" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">HVB (HypoVereinsbank)</span><span class="pd">MOBILE BANKING APP, REDESIGNED FOR EVERYDAY CLARITY.</span><a class="go" href="https://www.hvb.de" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">Vodafone</span><span class="pd">SMART TV APP. INTERFACE, STYLEGUIDE, ICONS AND A MODULAR SYSTEM.</span><a class="go" href="https://www.vodafone.de" target="_blank" rel="noopener">VISIT ↗</a></li>
+    <li><span class="pn">Kickbase</span><span class="pd">BUNDESLIGA FANTASY FOOTBALL. PRODUCT, BRAND, DESIGN SYSTEM AND IDENTITY.</span><a class="go" href="https://www.kickbase.com" target="_blank" rel="noopener">VISIT ↗</a></li>
+  </ol>
+</section>
+<div class="end">
+<section class="closer"><p>15 YEARS OF PRODUCT DESIGN.<br>THE PROBLEM STILL COMES FIRST.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A">WORK WITH ME.</a></section>
+<footer class="legal"><span>© SUPERSMAIL GMBH</span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
+</div>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const qs = new URLSearchParams(location.search);
+const off = (qs.get('off') || '').split(',');
+const on = { page: true, hdri: true, micro: true, react: true, drift: true, calm: false, glass: true };
+for (const k of Object.keys(on)) if (off.includes(k)) on[k] = false;
+if ((qs.get('on') || '').split(',').includes('calm')) on.calm = true;
+let mode = qs.get('m') === '1' ? 1 : 0;
+
+const cv = document.getElementById('stage');
+const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+r.setPixelRatio(Math.min(2, devicePixelRatio));
+r.toneMapping = THREE.ACESFilmicToneMapping;
+r.toneMappingExposure = 0.9;
+r.outputColorSpace = THREE.SRGBColorSpace;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0d0d0d);
+const cam = new THREE.PerspectiveCamera(26, 1, 0.1, 100);
+cam.position.set(0, 0, 12.5);
+
+// ---------- environment: dome or hdri, softboxes, optionally the page itself ----------
+const sb = document.createElement('canvas'); sb.width = sb.height = 256;
+{ const g = sb.getContext('2d'), gr = g.createRadialGradient(128, 128, 10, 128, 128, 128);
+  gr.addColorStop(0, '#fff'); gr.addColorStop(0.55, '#e8e8e8'); gr.addColorStop(0.9, '#555'); gr.addColorStop(1, '#000');
+  g.fillStyle = gr; g.fillRect(0, 0, 256, 256); }
+const sbTex = new THREE.CanvasTexture(sb);
+function softbox(env, w, h, pos, i, map = sbTex) {
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map, side: THREE.DoubleSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+  m.material.color.setRGB(i, i, i);
+  m.position.set(...pos); m.lookAt(0, 0, 0); env.add(m);
+}
+const domeMat = new THREE.ShaderMaterial({
+  side: THREE.BackSide,
+  vertexShader: 'varying vec3 w;void main(){w=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader: 'varying vec3 w;void main(){float y=w.y;vec3 c=vec3(.025);c+=vec3(.3)*smoothstep(-.9,-.02,y);c+=vec3(1.1)*exp(-pow((y-.02)/.05,2.));c+=vec3(.42)*smoothstep(-.02,.2,y)*(1.-smoothstep(.35,1.,y));c+=vec3(.08)*smoothstep(.6,1.,y);gl_FragColor=vec4(c,1.);}',
+});
+const HDRIS = [
+  { name: 'STUDIO', file: 'studio_small_03_1k.hdr', k: 2.6 },
+  { name: 'SOFT STUDIO', file: 'studio_small_03_1k.hdr', k: 1.0 },
+  { name: 'WAREHOUSE', file: 'empty_warehouse_01_1k.hdr', k: 1.3 },
+];
+let hdriIdx = +(qs.get('hdri') || 1);
+const hdrTexs = {};
+const hdrLoader = new RGBELoader();
+function loadHdri(i) {
+  const f = HDRIS[i].file;
+  if (hdrTexs[f]) return;
+  hdrTexs[f] = 'loading';
+  hdrLoader.load('/hdri/' + f, t => { hdrTexs[f] = t; envCache.clear(); applyEnv(); });
+}
+
+const pageCanvas = document.createElement('canvas'); pageCanvas.width = 2048; pageCanvas.height = 1024;
+const pageTex = new THREE.CanvasTexture(pageCanvas);
+pageTex.colorSpace = THREE.SRGBColorSpace;
+async function drawPage() {
+  await document.fonts.load("64px 'Geist Pixel'");
+  const g = pageCanvas.getContext('2d');
+  g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 1024);
+  g.textAlign = 'center'; g.fillStyle = '#fff';
+  g.font = "200px 'Geist Pixel'";
+  for (const y of [230, 520, 810]) g.fillText('SMAIL SMAJKIC', 1024, y);
+  g.font = "84px 'Geist Pixel'"; g.fillStyle = '#b0b0b0';
+  for (const y of [345, 635, 925]) g.fillText('PRODUCT DESIGN AND BRAND.', 1024, y);
+  pageTex.needsUpdate = true;
+  return;
+  g.textAlign = 'left'; g.font = "54px 'Geist Pixel'";
+  const words = document.querySelector('.j').textContent.split(' ');
+  let line = '', y = 760;
+  for (const w of words) {
+    const test = line ? line + ' ' + w : w;
+    if (g.measureText(test).width > 1860) { g.fillText(line, 90, y); line = w; y += 78; } else line = test;
+  }
+  g.fillText(line, 90, y);
+  pageTex.needsUpdate = true;
+}
+
+const pmrem = new THREE.PMREMGenerator(r);
+const envCache = new Map();
+function envFor(hdri, page) {
+  const hd = HDRIS[hdriIdx], hdrTex = hdri ? hdrTexs[hd.file] : null, ok = hdrTex && hdrTex !== 'loading';
+  const key = `${ok ? hdriIdx : 'x'}${page ? 1 : 0}`;
+  if (envCache.has(key)) return envCache.get(key);
+  const env = new THREE.Scene();
+  if (ok) {
+    const sph = new THREE.Mesh(new THREE.SphereGeometry(50, 64, 32), new THREE.MeshBasicMaterial({ map: hdrTex, side: THREE.BackSide }));
+    sph.material.color.setScalar(hd.k);
+    env.add(sph);
+  } else {
+    env.add(new THREE.Mesh(new THREE.SphereGeometry(50, 64, 32), domeMat));
+  }
+  softbox(env, 1.4, 12, [-9, 1, 4], 14);
+  softbox(env, 0.8, 12, [8, 0, -3], 9);
+  softbox(env, 4, 2.2, [-1, 11, 1], 7);
+  softbox(env, 0.5, 9, [-4, 3, -9], 10);
+  softbox(env, 0.35, 9, [5, 2, 8], 8);
+  softbox(env, 3, 3, [3, 6, -8], 4);
+  softbox(env, 14, 0.5, [0, -1.2, -10], 12);
+  softbox(env, 0.5, 10, [-7, 0, -8], 9);
+  softbox(env, 0.5, 10, [7, 0, -8], 9);
+  if (page) softbox(env, 26, 13, [0, 0.5, 5.5], 13, pageTex);
+  const tex = pmrem.fromScene(env, 0, 0.1, 100, { size: 1024 }).texture;
+  envCache.set(key, tex);
+  return tex;
+}
+function applyEnv() { if (on.hdri) loadHdri(hdriIdx); scene.environment = envFor(on.hdri, on.page); }
+
+// ---------- geometry: rounded cube, dense near the edges ----------
+const S = 1.6, H = S / 2, RAD = 0.035;
+function cubeGeo(N) {
+  const warp = c => Math.sign(c) * H * (1 - Math.pow(Math.max(0, 1 - Math.abs(c) / H), 1.7));
+  let geo = new THREE.BoxGeometry(S, S, S, N, N, N);
+  geo.deleteAttribute('normal'); geo.deleteAttribute('uv');
+  geo = mergeVertices(geo);
+  const pos = geo.attributes.position, v = new THREE.Vector3(), inner = new THREE.Vector3(), d = new THREE.Vector3();
+  for (let i = 0; i < pos.count; i++) {
+    v.fromBufferAttribute(pos, i);
+    v.set(warp(v.x), warp(v.y), warp(v.z));
+    inner.set(THREE.MathUtils.clamp(v.x, -H + RAD, H - RAD), THREE.MathUtils.clamp(v.y, -H + RAD, H - RAD), THREE.MathUtils.clamp(v.z, -H + RAD, H - RAD));
+    d.subVectors(v, inner);
+    if (d.lengthSq() > 0) { d.normalize(); v.copy(inner).addScaledVector(d, RAD); }
+    pos.setXYZ(i, v.x, v.y, v.z);
+  }
+  geo.computeVertexNormals();
+  geo.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 2);
+  return geo;
+}
+const geoCoarse = null, geoDense = cubeGeo(150);
+
+// ---------- material: obsidian, deformation and micro surface in the shader ----------
+const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 } };
+const mat = new THREE.MeshPhysicalMaterial({ color: 0x15161a, metalness: 1, roughness: 0.015, clearcoat: 1, clearcoatRoughness: 0.005, envMapIntensity: 1.9 });
+const NOISE = `
+float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
+float vn3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),
+mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}`;
+mat.onBeforeCompile = sh => {
+  Object.assign(sh.uniforms, U);
+  sh.vertexShader = sh.vertexShader
+    .replace('#include <common>', `#include <common>
+uniform float uPhase,uWave,uAmp,uMode,uH,uFine; varying vec3 vObj;
+float cwf(vec3 p){vec3 a=abs(p/uH);float mx=max(a.x,max(a.y,a.z)),mn=min(a.x,min(a.y,a.z)),md=a.x+a.y+a.z-mx-mn;return max(0.,1.-mn*mn)*max(0.,1.-md*md);}
+vec3 disp(vec3 p,vec3 n){
+  float waves=sin(p.x*2.3+uWave*.9)*sin(p.y*2.7-uWave*.7)*sin(p.z*2.1+uWave*.55)+.5*uFine*sin(p.x*4.1-p.y*3.3+uWave*1.3)*sin(p.z*3.7+uWave*.8);
+  float mono=cwf(p)*sin(uPhase);
+  return p+n*mix(waves*.075,mono*.16,uMode)*uAmp;}`)
+    .replace('#include <beginnormal_vertex>', `vec3 objectNormal;{
+  vec3 n=normalize(normal);vec3 a=abs(n.y)<.99?vec3(0,1,0):vec3(1,0,0);
+  vec3 t1=normalize(cross(n,a)),t2=cross(n,t1);float e=.004;
+  vec3 p0=disp(position,n),p1=disp(position+t1*e,n),p2=disp(position+t2*e,n);
+  objectNormal=normalize(cross(p1-p0,p2-p0));if(dot(objectNormal,n)<0.)objectNormal=-objectNormal;}`)
+    .replace('#include <begin_vertex>', 'vec3 transformed=disp(position,normalize(normal));vObj=position;');
+  sh.fragmentShader = sh.fragmentShader
+    .replace('#include <common>', '#include <common>\nuniform float uMicro; varying vec3 vObj;' + NOISE)
+    .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nfloat smudge=smoothstep(.5,.85,vn3(vObj*2.4+3.1))*(.6+.4*vn3(vObj*14.));roughnessFactor=clamp(roughnessFactor+uMicro*(.16*smudge+.01*vn3(vObj*40.)),0.,1.);')
+    .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+uMicro*.14*smoothstep(.5,.85,vn3(vObj*2.4+3.1)),0.,1.);\n#endif');
+};
+
+const cube = new THREE.Mesh(geoDense, mat);
+void geoCoarse;
+const holder = new THREE.Group();
+holder.add(cube);
+scene.add(holder);
+
+const composer = new EffectComposer(r);
+composer.addPass(new RenderPass(scene, cam));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.12, 0.4, 0.97));
+composer.addPass(new OutputPass());
+function size() {
+  const w = cv.clientWidth, h = cv.clientHeight;
+  r.setSize(w, h, false); composer.setSize(w, h);
+  cam.aspect = w / h; cam.updateProjectionMatrix();
+}
+size(); addEventListener('resize', size);
+
+// ---------- toggles ----------
+const tBtns = [...document.querySelectorAll('[data-k]')], mBtns = [...document.querySelectorAll('[data-m]')];
+function sync() {
+  tBtns.forEach(b => b.setAttribute('aria-pressed', on[b.dataset.k]));
+  mBtns.forEach(b => b.setAttribute('aria-pressed', +b.dataset.m === mode));
+  U.uMicro.value = on.micro ? 1 : 0;
+  U.uFine.value = on.calm ? 0.12 : 1;
+  document.body.classList.toggle('glass', on.glass);
+  if (window.__frostReady) setFrost();
+  applyEnv();
+}
+tBtns.forEach(b => b.onclick = () => {
+  if (b.dataset.k === 'hdri') {
+    if (!on.hdri) { on.hdri = true; hdriIdx = 0; }
+    else if (hdriIdx < HDRIS.length - 1) hdriIdx++;
+    else on.hdri = false;
+      } else on[b.dataset.k] = !on[b.dataset.k];
+  sync();
+});
+mBtns.forEach(b => b.onclick = () => { mode = +b.dataset.m; sync(); });
+sync();
+drawPage().then(() => { envCache.clear(); applyEnv(); });
+
+// ---------- motion ----------
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let px = 0, py = 0, cx = 0, cy = 0, prox = 0, scrollV = 0, lastY = scrollY, freeze = 0;
+addEventListener('pointermove', e => {
+  px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5;
+  const rc = cv.getBoundingClientRect();
+  const dx = e.clientX - (rc.left + rc.width / 2), dy = e.clientY - (rc.top + rc.height / 2);
+  prox = 1 - Math.min(1, Math.hypot(dx, dy) / (rc.height * 0.4));
+});
+addEventListener('scroll', () => { scrollV += Math.abs(scrollY - lastY); lastY = scrollY; }, { passive: true });
+const fading = [document.querySelector('.hero .foot'), document.querySelector('header')].filter(Boolean);
+function fadeFoot() {
+  const p = Math.min(1, Math.max(0, scrollY / (innerHeight * 0.35)));
+  for (const el of fading) {
+    el.style.filter = p > 0 ? `blur(${(p * 14).toFixed(1)}px)` : '';
+    el.style.opacity = (1 - p).toFixed(3);
+    el.style.pointerEvents = p > 0.9 ? 'none' : '';
+  }
+}
+addEventListener('scroll', fadeFoot, { passive: true });
+fadeFoot();
+const frost = document.querySelector('.frost'), endEl = document.querySelector('.end'), workEl = document.querySelector('.work');
+let frostTarget = 0, frostCur = 0;
+function setFrost() {
+  const h = innerHeight, clamp = v => Math.min(1, Math.max(0, v));
+  // full frost once LATEST WORK sits at 60 % of the viewport, clears again before the closer
+  const full = workEl.getBoundingClientRect().top + scrollY + 128 - h * 0.6;
+  const pin = clamp(scrollY / full);
+  const pout = clamp((scrollY + h - (endEl.getBoundingClientRect().top + scrollY)) / (h * 0.6));
+  frostTarget = on.glass ? pin * (1 - pout) : 0;
+}
+function frostFrame() {
+  frostCur += (frostTarget - frostCur) * 0.08;
+  if (Math.abs(frostTarget - frostCur) < 0.0005) frostCur = frostTarget;
+  const e = frostCur * frostCur * (3 - 2 * frostCur);
+  const b = `blur(${(64 * e).toFixed(1)}px) brightness(${(1 + 0.15 * e).toFixed(3)})`;
+  frost.style.backdropFilter = frost.style.webkitBackdropFilter = e > 0.002 ? b : 'none';
+  frost.style.background = `rgba(30,30,32,${(0.55 * e).toFixed(3)})`;
+  requestAnimationFrame(frostFrame);
+}
+addEventListener('scroll', setFrost, { passive: true });
+addEventListener('resize', setFrost);
+window.__frostReady = true;
+setFrost();
+requestAnimationFrame(frostFrame);
+
+let prev = 0, t = 0, proxS = 0;
+r.setAnimationLoop(ms => {
+  const dt = Math.min(0.05, (ms - prev) / 1000); prev = ms;
+  if (reduced) { composer.render(); return; }
+  t += dt;
+  cx += (px - cx) * 0.04; cy += (py - cy) * 0.04;
+  scrollV *= 0.9;
+  freeze = 0;
+  proxS += ((on.react ? prox : 0) - proxS) * 0.05;
+  const rate = (1 + 1.8 * proxS) * (1 - freeze);
+  U.uPhase.value += 0.55 * rate * dt;
+  U.uWave.value += rate * dt;
+  U.uAmp.value = 1 + 0.35 * proxS;
+  U.uMode.value += (mode - U.uMode.value) * 0.06;
+
+  if (qs.has('face')) {
+    cube.rotation.set(0, 0.0001, 0);
+  } else if (on.drift) {
+    holder.position.y = Math.sin(t * 0.5) * 0.1;
+    cube.rotation.set(
+      0.55 + Math.sin(t * 0.11) * 0.25 + Math.sin(t * 0.183) * 0.08 + cy * 0.3,
+      0.7 + Math.sin(t * 0.069) * 1.3 + Math.sin(t * 0.141) * 0.4 + cx * 0.6,
+      0.15 + Math.sin(t * 0.087) * 0.14);
+  } else {
+    holder.position.y = Math.sin(t * 0.6) * 0.08;
+    cube.rotation.set(0.62 + Math.sin(t * 0.13) * 0.25 + cy * 0.4, t * 0.11 + cx * 0.8, 0.18 + Math.sin(t * 0.09) * 0.1);
+  }
+  scene.environmentRotation.y = cx * 0.9;
+  composer.render();
+});
+</script>
+</body>
+</html>
