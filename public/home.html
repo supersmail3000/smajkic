@@ -39,11 +39,11 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
-.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:12px 22px 9px;background:linear-gradient(#000 60%,#0a0a0a);box-shadow:inset 0 2px 0 #000,inset 0 7px 9px -3px #000,inset 0 -1px 0 rgba(255,255,255,.2),inset 0 -4px 5px -3px rgba(255,255,255,.07)}
-/* a window cut into the paper: the top wall throws its shadow in, the lower wall catches the light, nothing sits on top of the page */
-.cta span{background:linear-gradient(180deg,#ffffff 0%,#d6d6d6 34%,#6b6b6b 49%,#161616 52%,#4a4a4a 64%,#c9c9c9 84%,#ffffff 100%);background-size:100% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;transition:background-position 1.2s ease}
-/* chrome type: a hard horizon in the letters, the light slides through them on hover */
-.cta:hover span{background-image:linear-gradient(180deg,#ffffff 0%,#f0f0f0 22%,#7a7a7a 37%,#1a1a1a 40%,#555 55%,#dcdcdc 76%,#ffffff 100%)}
+.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:11px 22px 9px;background:#000;box-shadow:inset 0 4px 7px #000,inset 0 1px 0 #000,inset 0 -1px 0 rgba(255,255,255,.1)}
+/* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
+.cta span{background:linear-gradient(180deg,#ffffff 0%,#ececec 44%,#a4a4a4 54%,#e2e2e2 100%);-webkit-background-clip:text;background-clip:text;color:transparent;transition:filter .5s}
+/* clean chrome on small type: bright silver with one soft horizon, no dark band */
+.cta:hover span{filter:brightness(1.18)}
 .j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
 .row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
 </style>
