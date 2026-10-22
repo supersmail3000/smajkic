@@ -50,14 +50,11 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 /* states read as the paper: hover lets a little light into the window, press pushes it deeper, focus gets a fine silver ring */
 .cta:hover{background:linear-gradient(#0b0b0b,#121212)}
 .cta:active{box-shadow:inset 0 3px 0 #000,inset 0 11px 12px -2px #000,inset 0 -1px 0 rgba(255,255,255,.05)}
-.cta:active canvas{transform:translateY(1px)}
 .cta:focus-visible{outline:1px solid rgba(220,220,220,.6);outline-offset:4px}
 /* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
-.cta span{background:linear-gradient(105deg,rgba(255,255,255,0) 42%,rgba(255,255,255,.95) 50%,rgba(255,255,255,0) 58%) no-repeat,linear-gradient(180deg,#f2f2f2 0%,#cfcfcf 45%,#8f8f8f 58%,#c4c4c4 100%);background-size:300% 100%,100% 100%;background-position:160% 0,0 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 5.5s ease-in-out infinite}
-/* chrome on small type reads through moving light: a narrow glint crosses the silver every few seconds */
-@keyframes sheen{0%,55%{background-position:160% 0,0 0}100%{background-position:-60% 0,0 0}}
-.cta:hover span{animation-duration:1.6s}
-@media (prefers-reduced-motion:reduce){.cta span{animation:none}}
+.cta span{display:inline-block;color:#d4d4d4;transition:color .4s,transform .15s}
+.cta:hover span{color:#fff}
+.cta:active span{color:#a8a8a8;transform:translateY(1px)}
 .j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
 .row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
 .noui .panel,.noui </style>
@@ -377,91 +374,7 @@ sync();
 drawPage().then(() => { envCache.clear(); applyEnv(); });
 
 
-// chrome type: the button words become bevelled metal in a small shader of their own
-const CT_VS = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
-const CT_FS = `precision highp float;varying vec2 v;uniform sampler2D M,B;uniform vec2 px,P;uniform float T,L;
-float mask(vec2 q){return texture2D(M,q).a;}
-float hgt(vec2 q){return texture2D(B,q).a;}
-void main(){
-  float a=mask(v); if(a<.004){gl_FragColor=vec4(0.);return;}
-  float hx=hgt(v+vec2(px.x,0.))-hgt(v-vec2(px.x,0.));
-  float hy=hgt(v+vec2(0.,px.y))-hgt(v-vec2(0.,px.y));
-  vec3 n=normalize(vec3(-hx*1.5,-hy*1.5,1.));
-  vec3 r=reflect(vec3(0.,0.,-1.),n);
-  float y=r.y*1.6+(v.y-.46)*1.15+P.y*.08;
-  float x=r.x*1.2+(v.x-.5)*.6+P.x*.1;
-  vec3 c=y>0.?mix(vec3(.62),vec3(1.),smoothstep(0.,.55,y)):mix(vec3(.03),vec3(.34),smoothstep(-1.,-.06,y));
-  c*=1.-.4*exp(-pow(y/.06,2.));
-  float g=exp(-pow((x+y*.55-(fract(T*.05)*3.6-1.8))/.12,2.));
-  c+=vec3(.45)*g;
-  c*=L;
-  gl_FragColor=vec4(c*a,a);}`;
-let ctPx = 0, ctPy = 0;
-addEventListener('pointermove', e => { ctPx = e.clientX / innerWidth - 0.5; ctPy = e.clientY / innerHeight - 0.5; });
-function chromeText(span) {
-  const host = span.parentElement, pad = 4, S = 3;
-  host.style.position = 'relative';
-  const cvs = document.createElement('canvas');
-  cvs.setAttribute('aria-hidden', 'true');
-  Object.assign(cvs.style, { position: 'absolute', pointerEvents: 'none' });
-  host.appendChild(cvs);
-  const gl = cvs.getContext('webgl', { premultipliedAlpha: true, alpha: true });
-  if (!gl) return;
-  span.style.background = 'none'; span.style.color = 'transparent'; span.style.animation = 'none';
-  const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return o; };
-  const pr = gl.createProgram();
-  gl.attachShader(pr, sh(gl.VERTEX_SHADER, CT_VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, CT_FS));
-  gl.linkProgram(pr); gl.useProgram(pr);
-  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-  const lp = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(lp); gl.vertexAttribPointer(lp, 2, gl.FLOAT, false, 0, 0);
-  const U = n => gl.getUniformLocation(pr, n);
-  const tex = (unit, src) => {
-    const t = gl.createTexture(); gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, src);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  };
-  function layout() {
-    const w = span.offsetWidth, h = span.offsetHeight, cs = getComputedStyle(span);
-    Object.assign(cvs.style, { left: span.offsetLeft - pad + 'px', top: span.offsetTop - pad + 'px', width: w + pad * 2 + 'px', height: h + pad * 2 + 'px' });
-    const W = (w + pad * 2) * S, H = (h + pad * 2) * S;
-    cvs.width = W; cvs.height = H; gl.viewport(0, 0, W, H);
-    let text = span.textContent;
-    if (cs.textTransform === 'lowercase') text = text.toLowerCase(); else if (cs.textTransform === 'uppercase') text = text.toUpperCase();
-    const draw = blur => {
-      const c = document.createElement('canvas'); c.width = W; c.height = H;
-      const g = c.getContext('2d');
-      g.font = `${cs.fontWeight} ${parseFloat(cs.fontSize) * S}px ${cs.fontFamily}`;
-      g.textBaseline = 'middle'; g.fillStyle = '#fff';
-      if (blur) g.filter = `blur(${blur}px)`;
-      g.fillText(text, pad * S, H / 2 + S * 0.5);
-      return c;
-    };
-    tex(0, draw(0)); tex(1, draw(S * 0.9));
-    gl.uniform1i(U('M'), 0); gl.uniform1i(U('B'), 1); gl.uniform2f(U('px'), 1 / W, 1 / H);
-  }
-  layout();
-  addEventListener('resize', layout);
-  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let tt = 0, stopAt = 0, last = performance.now(), hover = false, down = false, lvl = 1;
-  // still at rest; entering sends one glint across the word, then it rests off the letters again
-  host.addEventListener('pointerenter', () => { hover = true; if (tt >= stopAt) { const c = Math.ceil(tt * 0.05) / 0.05; tt = c + 3.5; stopAt = c + 20; } });
-  host.addEventListener('pointerleave', () => { hover = false; down = false; });
-  host.addEventListener('pointerdown', () => { down = true; });
-  addEventListener('pointerup', () => { down = false; });
-  (function frame(now) {
-    const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    if (!still && tt < stopAt) tt = Math.min(stopAt, tt + dt * 6);
-    gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
-    lvl += ((down ? 0.7 : hover ? 1.18 : 1) - lvl) * 0.15;
-    gl.uniform1f(U('T'), tt); gl.uniform1f(U('L'), lvl); gl.uniform2f(U('P'), ctPx, -ctPy);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    requestAnimationFrame(frame);
-  })(last);
-}
-document.fonts.ready.then(() => document.querySelectorAll('.cta span').forEach(chromeText));
+
 
 // ---------- motion ----------
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
