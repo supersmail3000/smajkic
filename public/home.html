@@ -408,6 +408,7 @@ setFrost();
 requestAnimationFrame(frostFrame);
 
 let prev = 0, t = 0, proxS = 0, proxWas = 0;
+const endSection = document.querySelector('.end');
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
 const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion();
 const _tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.28, -0.38, 0));
@@ -442,6 +443,12 @@ r.setAnimationLoop(ms => {
   U.uTime.value = t;
   // hovering over the cube keeps the facing side transformed, leaving lets it flow back
   if (morphState.word >= 0) { morphState.idx = morphState.word; morphState.until = t + 1.5; }
+  // in the closing footer the cube runs through all three by itself: product, design, brand, back to the monolith
+  if (endSection.getBoundingClientRect().top < innerHeight * 0.5) {
+    if (morphState.autoStart == null) morphState.autoStart = t;
+    const stage = Math.floor((t - morphState.autoStart) / 3.4) % 4;
+    if (stage < 3) { morphState.idx = stage; morphState.until = t + 0.5; } else morphState.until = 0;
+  } else if (morphState.autoStart != null) { morphState.autoStart = null; morphState.until = 0; }
   proxWas = prox;
   if (morphState.hold >= 0) { morphState.idx = morphState.hold; morphState.until = t + 1; }
   // a spring, so the metal overshoots its new shape a little and settles
