@@ -475,6 +475,9 @@ r.setAnimationLoop(ms => {
     if (morphState.idx === 2) {
       // the coin lies flat, tipped a little toward the viewer, and turns slowly like one set down on a table
       _qt.setFromUnitVectors(AXES[2], _flat).premultiply(_spin.setFromAxisAngle(_up, t * 0.25));
+    } else if (morphState.idx === 1) {
+      // the sphere faces the viewer square on, so DESIGN sits upright in the middle
+      _qt.setFromUnitVectors(AXES[1], _fwd);
     } else _qt.setFromUnitVectors(AXES[morphState.idx], _fwd).premultiply(_tilt);
     cube.quaternion.slerpQuaternions(_qd, _qt, morphState.focus * morphState.focus * (3 - 2 * morphState.focus));
   }
