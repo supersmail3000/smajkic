@@ -294,10 +294,9 @@ vec3 disp(vec3 p,vec3 n){
   float waves=sin(p.x*2.3+uWave*.9)*sin(p.y*2.7-uWave*.7)*sin(p.z*2.1+uWave*.55)+.5*uFine*sin(p.x*4.1-p.y*3.3+uWave*1.3)*sin(p.z*3.7+uWave*.8);
   float mono=cwf(p)*sin(uPhase);
   vec3 q=p+n*mix(waves*.075,mono*.16,uMode)*uAmp;
-  vec3 mc=clamp(uMorph,0.,1.);
-  q=mix(q,shapeT(p,0.)+normalize(p)*mono*.02,mc.x);
-  q=mix(q,shapeT(p,1.),mc.y);
-  q=mix(q,shapeT(p,2.)+normalize(p)*mono*.02,mc.z);
+  // the shapes share one whole: going from one to the next never passes back through the cube
+  vec3 mc=clamp(uMorph,0.,1.);float tot=mc.x+mc.y+mc.z;vec3 w=tot>1.?mc/tot:mc;
+  q=q*(1.-w.x-w.y-w.z)+(shapeT(p,0.)+normalize(p)*mono*.02)*w.x+shapeT(p,1.)*w.y+(shapeT(p,2.)+normalize(p)*mono*.02)*w.z;
   // the spring's overshoot swells the shape instead of pulling the cube back through it
   vec3 ov=uMorph-mc;q*=1.+(ov.x+ov.y+ov.z)*.6;
   return q+normalize(p)*waves*.075*max(0.,uAmp-1.35)*.6;}`)
@@ -426,7 +425,8 @@ requestAnimationFrame(frostFrame);
 let prev = 0, t = 0, proxS = 0, proxWas = 0;
 const endSection = document.querySelector('.end');
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
-const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion();
+const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion(), _qs = new THREE.Quaternion();
+let qsLive = false;
 const _tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.28, -0.38, 0));
 const _up = new THREE.Vector3(0, 1, 0), _flat = new THREE.Vector3(0, 0.71, 0.71).normalize(), _spin = new THREE.Quaternion();
 // the header words aim the morph; a click or tap on the cube steps through the three shapes
@@ -467,20 +467,24 @@ r.setAnimationLoop(ms => {
   } else if (morphState.autoStart != null) { morphState.autoStart = null; morphState.until = 0; }
   proxWas = prox;
   if (morphState.hold >= 0) { morphState.idx = morphState.hold; morphState.until = t + 1; }
-  // a spring, so the metal overshoots its new shape a little and settles
+  // every change runs one even ease-in-out over 1.5 s from wherever the shape is, so it starts at once and never rushes
   let active = false;
+  if (!morphState.tw) morphState.tw = [0, 1, 2].map(() => ({ from: 0, to: 0, t0: 0 }));
   for (let i = 0; i < 3; i++) {
     const target = i === morphState.idx && t < morphState.until ? 1 : 0;
     if (target) active = true;
-    const cur = U.uMorph.value.getComponent(i);
-    morphState.vel[i] = (morphState.vel[i] + (target - cur) * 0.0011) * 0.945;
-    U.uMorph.value.setComponent(i, Math.min(1.12, Math.max(-0.08, cur + morphState.vel[i])));
+    const cur = U.uMorph.value.getComponent(i), tw = morphState.tw[i];
+    if (target !== tw.to) { tw.from = cur; tw.to = target; tw.t0 = t; }
+    const k = Math.min(1, (t - tw.t0) / 1.5), e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    const next = tw.from + (tw.to - tw.from) * e;
+    morphState.vel[i] = next - cur;
+    U.uMorph.value.setComponent(i, next);
   }
   morphState.focus += ((active ? 1 : 0) - morphState.focus) * 0.018;
   // the metal works while it moves: ripples grow with the speed of the morph and settle with it
   const churn = Math.abs(morphState.vel[0]) + Math.abs(morphState.vel[1]) + Math.abs(morphState.vel[2]);
   morphState.churn = (morphState.churn || 0) + (churn - (morphState.churn || 0)) * 0.1;
-  U.uAmp.value += morphState.churn * 40;
+  U.uAmp.value += morphState.churn * 14;
   markWords();
 
   if (qs.has('face')) {
@@ -501,6 +505,7 @@ r.setAnimationLoop(ms => {
   }
   if (morphState.focus > 0.001 && morphState.idx >= 0) {
     _qd.copy(cube.quaternion);
+    if (!qsLive) { _qs.copy(_qd); qsLive = true; }
     if (morphState.idx === 2) {
       // the coin lies flat, tipped a little toward the viewer, and turns slowly like one set down on a table
       _qt.setFromUnitVectors(AXES[2], _flat).multiply(_spin.setFromAxisAngle(_up, t * 0.25));
@@ -508,8 +513,10 @@ r.setAnimationLoop(ms => {
       // the sphere faces the viewer square on, so DESIGN sits upright in the middle
       _qt.setFromUnitVectors(AXES[1], _fwd);
     } else _qt.setFromUnitVectors(AXES[morphState.idx], _fwd).premultiply(_tilt);
-    cube.quaternion.slerpQuaternions(_qd, _qt, morphState.focus * morphState.focus * (3 - 2 * morphState.focus));
-  }
+    // the shown pose glides toward the target, so switching words never snaps the turn
+    _qs.slerp(_qt, 0.045);
+    cube.quaternion.slerpQuaternions(_qd, _qs, morphState.focus * morphState.focus * (3 - 2 * morphState.focus));
+  } else qsLive = false;
   // in the closing footer the cube rises into the upper half, the statement sits below it
   {
     const f = Math.min(1, Math.max(0, 1 - endSection.getBoundingClientRect().top / innerHeight));
