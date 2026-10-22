@@ -39,7 +39,10 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
-.cta{flex:none;background:#050505;color:#fff;text-decoration:none;border-radius:999px;padding:8px 16px;box-shadow:inset 0 2px 3px #000,0 1px 0 #2a2a2a}
+.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:14px 22px 7px;background:linear-gradient(#000 0%,#030303 40%,#1b1b1b 100%);box-shadow:inset 0 5px 0 #000,inset 0 14px 12px -6px rgba(0,0,0,1),inset 0 -2px 3px rgba(255,255,255,.07),0 1px 0 rgba(255,255,255,.18),0 2px 2px rgba(255,255,255,.04),0 -1px 1px rgba(0,0,0,.9)}
+/* a die-cut window in the paper: deep shadow under the top edge, light on the lower lip, silver foil set low */
+.cta span{background:linear-gradient(180deg,#6a6a6a 0%,#ffffff 38%,#8f8f8f 62%,#d9d9d9 82%,#f7f7f7 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 -1px 0 rgba(0,0,0,.85));transition:filter .4s}
+.cta:hover span{filter:drop-shadow(0 -1px 0 rgba(0,0,0,.85)) brightness(1.2)}
 .j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
 .row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
 </style>
@@ -51,7 +54,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 <div class="hero">
 <footer class="foot">
   <p class="j"><span>FIND THE PROBLEM.</span> <span>SHAPE THE PRODUCT.</span> <span>BUILD THE BRAND.</span></p>
-  <a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A">WORK WITH ME.</a>
+  <a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A"><span>WORK WITH ME.</span></a>
 </footer>
 </div>
 <div class="frost"></div>
@@ -72,7 +75,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
   </ol>
 </section>
 <div class="end">
-<section class="closer"><p>15 YEARS OF PRODUCT DESIGN.<br>THE PROBLEM STILL COMES FIRST.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A">WORK WITH ME.</a></section>
+<section class="closer"><p>15 YEARS OF PRODUCT DESIGN.<br>THE PROBLEM STILL COMES FIRST.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A"><span>WORK WITH ME.</span></a></section>
 <footer class="legal"><span>© SUPERSMAIL GMBH</span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
 </div>
 </div>
@@ -412,7 +415,7 @@ const endSection = document.querySelector('.end');
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
 const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion();
 const _tilt = new THREE.Quaternion().setFromEuler(new THREE.Euler(0.28, -0.38, 0));
-const _up = new THREE.Vector3(0, 1, 0), _flat = new THREE.Vector3(0, 0.9, 0.44).normalize(), _spin = new THREE.Quaternion();
+const _up = new THREE.Vector3(0, 1, 0), _flat = new THREE.Vector3(0, 0.71, 0.71).normalize(), _spin = new THREE.Quaternion();
 // the header words aim the morph; a click or tap on the cube steps through the three shapes
 const hws = [...document.querySelectorAll('.hw')];
 function markWords() { hws.forEach(h => h.classList.toggle('on', +h.dataset.m === morphState.idx && t < morphState.until)); }
@@ -487,7 +490,7 @@ r.setAnimationLoop(ms => {
     _qd.copy(cube.quaternion);
     if (morphState.idx === 2) {
       // the coin lies flat, tipped a little toward the viewer, and turns slowly like one set down on a table
-      _qt.setFromUnitVectors(AXES[2], _flat).premultiply(_spin.setFromAxisAngle(_up, t * 0.25));
+      _qt.setFromUnitVectors(AXES[2], _flat).multiply(_spin.setFromAxisAngle(_up, t * 0.25));
     } else if (morphState.idx === 1) {
       // the sphere faces the viewer square on, so DESIGN sits upright in the middle
       _qt.setFromUnitVectors(AXES[1], _fwd);
