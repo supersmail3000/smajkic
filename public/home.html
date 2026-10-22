@@ -31,6 +31,11 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .hero .foot{margin-top:auto}
 .sheet{position:relative;z-index:3;margin-top:100vh;margin-top:100svh}
 .frost{position:fixed;inset:0;z-index:2;pointer-events:none}
+/* the glass blurs the paper's grain away, so the grain is laid again on top of it, as strong as the glass is milky */
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E")}
+
 .work{padding:128px 32px 240px}
 .wh{display:flex;justify-content:space-between;color:#7d7d7d;padding-bottom:48px}
 .work ol{list-style:none;margin:0;padding:0}
@@ -74,6 +79,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 </footer>
 </div>
 <div class="frost"></div>
+<div class="grain"></div>
 <div class="sheet">
 <section class="work">
   <div class="wh"><span>LATEST WORK</span></div>
@@ -484,7 +490,7 @@ function fadeFoot() {
 }
 addEventListener('scroll', fadeFoot, { passive: true });
 fadeFoot();
-const frost = document.querySelector('.frost'), endEl = document.querySelector('.end'), workEl = document.querySelector('.work');
+const grainEl = document.querySelector('.grain'), frost = document.querySelector('.frost'), endEl = document.querySelector('.end'), workEl = document.querySelector('.work');
 let frostTarget = 0, frostCur = 0;
 function setFrost() {
   const h = innerHeight, clamp = v => Math.min(1, Math.max(0, v));
@@ -498,9 +504,10 @@ function frostFrame() {
   frostCur += (frostTarget - frostCur) * 0.08;
   if (Math.abs(frostTarget - frostCur) < 0.0005) frostCur = frostTarget;
   const e = frostCur * frostCur * (3 - 2 * frostCur);
-  const b = `blur(${(64 * e).toFixed(1)}px) brightness(${(1 + 0.15 * e).toFixed(3)})`;
+  const b = `blur(${(64 * e).toFixed(1)}px)`;
   frost.style.backdropFilter = frost.style.webkitBackdropFilter = e > 0.002 ? b : 'none';
-  frost.style.background = `rgba(30,30,32,${(0.55 * e).toFixed(3)})`;
+  frost.style.background = `rgba(0,0,0,${(0.25 * e).toFixed(3)})`;
+  grainEl.style.opacity = e.toFixed(3);
   requestAnimationFrame(frostFrame);
 }
 addEventListener('scroll', setFrost, { passive: true });
