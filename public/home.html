@@ -16,7 +16,7 @@
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
 html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.045),rgba(255,255,255,0) 55%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),var(--paper,#000);background-attachment:scroll,scroll,fixed,fixed,scroll}
 /* one paper for the whole page: grain, light from the upper left, a darker lower right */
-html,body{margin:0;color:#a8a8a8;font:12px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
+html,body{margin:0;color:#a8a8a8;font:14px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 #stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0;background:transparent}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
 header b{font-weight:400;color:#fff;font-size:14px}
@@ -55,7 +55,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .cta span{display:inline-block;color:#d4d4d4;transition:color .4s,transform .15s}
 .cta:hover span{color:#fff}
 .cta:active span{color:#a8a8a8;transform:translateY(1px)}
-.j{text-align:justify;text-align-last:left;font-size:13px;color:#a8a8a8}
+.j{text-align:justify;text-align-last:left;font-size:14px;color:#a8a8a8}
 .row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
 .noui .panel,.noui </style>
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
@@ -100,6 +100,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const qs = new URLSearchParams(location.search);
 if (!qs.has('ui')) document.documentElement.classList.add('noui');
+
 { const k = +(qs.get('k') || 100); const v = Math.round((100 - k) / 100 * 255).toString(16).padStart(2, '0'); document.documentElement.style.setProperty('--paper', '#' + v + v + v); }
 const off = (qs.get('off') || '').split(',');
 const on = { page: true, hdri: true, micro: true, react: true, drift: true, calm: false, glass: true };
