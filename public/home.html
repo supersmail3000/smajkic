@@ -231,7 +231,7 @@ float vn3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
 return mix(mix(mix(h3(i),h3(i+vec3(1,0,0)),f.x),mix(h3(i+vec3(0,1,0)),h3(i+vec3(1,1,0)),f.x),f.y),
 mix(mix(h3(i+vec3(0,0,1)),h3(i+vec3(1,0,1)),f.x),mix(h3(i+vec3(0,1,1)),h3(i+vec3(1,1,1)),f.x),f.y),f.z);}`;
 const ENGRAVE = `
-uniform sampler2D uEng; uniform float uEngOn, uH; uniform mat3 uNM;
+uniform sampler2D uEng; uniform float uEngOn, uH; uniform mat3 uNM; uniform vec3 uMorph;
 vec2 engFace(vec3 p, out vec3 R, out vec3 U, out float k){
   vec3 a=abs(p);
   if(a.x>=a.y&&a.x>=a.z){R=vec3(0.,0.,-sign(p.x));U=vec3(0.,1.,0.);k=0.;}
@@ -293,10 +293,10 @@ vec3 disp(vec3 p,vec3 n){
     .replace('#include <begin_vertex>', 'vec3 transformed=disp(position,normalize(normal));vObj=position;');
   sh.fragmentShader = sh.fragmentShader
     .replace('#include <common>', '#include <common>\nuniform float uMicro; varying vec3 vObj;' + NOISE + ENGRAVE)
-    .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nfloat smudge=smoothstep(.5,.85,vn3(vObj*2.4+3.1))*(.6+.4*vn3(vObj*14.));roughnessFactor=clamp(roughnessFactor+uMicro*(.16*smudge+.01*vn3(vObj*40.)),0.,1.);vec3 engR,engU;float engK;vec2 engUV=engFace(vObj,engR,engU,engK);float engM=engH(engUV,engK)*uEngOn;roughnessFactor=clamp(roughnessFactor+.06*engM,0.,1.);')
+    .replace('#include <roughnessmap_fragment>', '#include <roughnessmap_fragment>\nfloat smudge=smoothstep(.5,.85,vn3(vObj*2.4+3.1))*(.6+.4*vn3(vObj*14.));roughnessFactor=clamp(roughnessFactor+uMicro*(.16*smudge+.01*vn3(vObj*40.)),0.,1.);vec3 engR,engU;float engK;vec2 engUV=engFace(vObj,engR,engU,engK);float engM=engH(engUV,engK)*uEngOn;roughnessFactor=clamp(roughnessFactor+.06*engM,0.,1.);\n// the sphere sees the whole page at once, a silkier skin turns the stacked type into a sheen\nroughnessFactor=clamp(roughnessFactor+.075*clamp(uMorph.y,0.,1.),0.,1.);')
     .replace('#include <normal_fragment_maps>', '#include <normal_fragment_maps>\n{float e=1./1024.;float dx=engH(engUV+vec2(e,0.),engK)-engH(engUV-vec2(e,0.),engK);float dy=engH(engUV+vec2(0.,e),engK)-engH(engUV-vec2(0.,e),engK);normal=normalize(normal+(normalize(uNM*engR)*dx+normalize(uNM*engU)*dy)*.7*uEngOn);}')
     .replace('#include <clearcoat_normal_fragment_begin>', '#include <clearcoat_normal_fragment_begin>\nclearcoatNormal=normal;')
-    .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+uMicro*.14*smoothstep(.5,.85,vn3(vObj*2.4+3.1)),0.,1.);\n#endif');
+    .replace('#include <lights_physical_fragment>', '#include <lights_physical_fragment>\n#ifdef USE_CLEARCOAT\nmaterial.clearcoatRoughness=clamp(material.clearcoatRoughness+uMicro*.14*smoothstep(.5,.85,vn3(vObj*2.4+3.1))+.05*clamp(uMorph.y,0.,1.),0.,1.);\n#endif');
 };
 
 const morphState = { idx: -1, sign: 1, until: 0, hold: qs.has('morph') ? +qs.get('morph') : -1, word: -1, cycle: -1, vel: [0, 0, 0], focus: 0 };
