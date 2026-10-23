@@ -50,9 +50,14 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .work li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr) 64px;gap:32px;align-items:baseline;padding:24px 0}
 .pn{color:#fff}.pd{color:#a8a8a8;max-width:600px}
 .go{color:#a8a8a8;text-decoration:none;text-align:right}.go:hover{color:#fff}
-.end{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
-.closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:32px 32px 96px;gap:40px}
-.closer p{margin:0;max-width:880px;color:#fff;font-size:32px;line-height:1.25}
+/* the last screen stays pinned for most of a screen more, so the statement has room to read itself in */
+.end{height:170vh;height:170svh}
+.pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column}
+.closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;gap:40px}
+.cube-slot{height:var(--slot,30vh);flex:none}
+.closer p{margin:0;max-width:880px;color:#fff;font-size:24px;line-height:1.35}
+/* the closing statement lights up letter by letter as the page reaches its end; the dim letters are the same colour at a quarter */
+.closer p .w{display:inline-block;white-space:nowrap}.closer p .c{opacity:.22}.closer p .mb{display:none}
 /* light mode: pale studio paper, dark type, the same cut window pressed into a light board */
 html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.12),rgba(0,0,0,0) 70%);background-attachment:scroll,fixed}
 .light body,.light header,.light .j,.light .pd,.light .go{color:#5a5a5a}
@@ -62,7 +67,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 rgba(0,0,0,.28),inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.28),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
 .light .cta span{color:#2b2b2b}.light .cta:hover span{color:#000}
 .light .grain{background-image:none}
-@media (max-width:720px){.closer p{font-size:24px}.hero .foot{align-items:flex-end}.hero .foot .j span{display:block}}
+@media (max-width:720px){.closer p{font-size:18px}.closer p .mb{display:inline}.hero .foot{align-items:flex-end}.hero .foot .j span{display:block}}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
@@ -113,10 +118,10 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
     <li><span class="pn">Kickbase</span><span class="pd">BUNDESLIGA FANTASY FOOTBALL. PRODUCT, BRAND, DESIGN SYSTEM AND IDENTITY.</span><a class="go" href="https://www.kickbase.com" target="_blank" rel="noopener">VISIT ↗</a></li>
   </ol>
 </section>
-<div class="end">
-<section class="closer"><p>15 YEARS OF PRODUCT DESIGN.<br>THE PROBLEM STILL COMES FIRST.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A"><span>WORK WITH ME.</span></a></section>
+<div class="end"><div class="pin">
+<section class="closer"><div class="cube-slot" aria-hidden="true"></div><p>PRODUCT DESIGN SINCE 2010.<br>WITH AGENTS, ANYTHING CAN BE BUILT.<br>NOT EVERYTHING DESERVES TO BE.<br>FIND THE PROBLEM. CUT THE REST.<br>WHAT'S LEFT GETS COPIED,<br class="mb"> NEVER MATCHED.<br>THAT IS THE WORK.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A"><span>WORK WITH ME.</span></a></section>
 <footer class="legal"><span>© SUPERSMAIL GMBH</span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
-</div>
+</div></div>
 </div>
 
 <script type="module">
@@ -197,8 +202,8 @@ function drawEnd() {
   g.fillStyle = LIGHT ? '#e4e4e2' : '#000'; g.fillRect(0, 0, 2048, 1024);
   g.textAlign = 'center'; g.fillStyle = LIGHT ? '#111' : '#fff';
   g.font = "150px 'Geist Pixel'";
-  g.fillText('15 years of product design.', 1024, 400);
-  g.fillText('the problem still comes first.', 1024, 580);
+  g.fillText('product design since 2010.', 1024, 400);
+  g.fillText('not everything deserves to be.', 1024, 580);
   g.font = "96px 'Geist Pixel'"; g.fillStyle = LIGHT ? '#4a4a4a' : '#c8c8c8';
   g.fillText('work with me.', 1024, 800);
   endTex.needsUpdate = true;
@@ -492,6 +497,34 @@ function frostFrame() {
   grainEl.style.opacity = e.toFixed(3);
   requestAnimationFrame(frostFrame);
 }
+// the closer reads itself in: each letter goes from dim to full as the last screen scrolls in, done at the very bottom
+const closerP = document.querySelector('.closer p');
+const chars = [];
+{
+  // line breaks stay as they are (the mobile-only ones too), only the words between them are split
+  const parts = closerP.innerHTML.split(/(<br[^>]*>)/i);
+  closerP.setAttribute('aria-label', parts.filter(p => !p.startsWith('<br')).map(p => p.trim()).join(' '));
+  closerP.innerHTML = parts.map(part => part.startsWith('<br') ? part : part.trim().split(/\s+/).filter(Boolean).map(word =>
+    `<span class="w" aria-hidden="true">${[...word].map(ch => `<span class="c">${ch}</span>`).join('')}</span>`).join(' ')).join(' ');
+  chars.push(...closerP.querySelectorAll('.c'));
+}
+function revealCloser() {
+  if (reduced) { for (const c of chars) c.style.opacity = 1; return; }
+  const h = innerHeight, max = document.documentElement.scrollHeight - h;
+  // starts when the statement's top enters the viewport, ends when the page can scroll no further;
+  // measured against the pinned screen, which itself moves while it sticks
+  const pinEl = closerP.closest('.pin'), endTop = pinEl.parentElement.getBoundingClientRect().top + scrollY;
+  const start = Math.min(max - 1, endTop + closerP.getBoundingClientRect().top - pinEl.getBoundingClientRect().top - h);
+  const p = Math.min(1, Math.max(0, (scrollY - start) / (max - start)));
+  const soft = 6, head = p * (chars.length + soft);
+  chars.forEach((c, i) => {
+    const t = Math.min(1, Math.max(0, (head - i) / soft));
+    c.style.opacity = (0.22 + 0.78 * t).toFixed(3);
+  });
+}
+addEventListener('scroll', revealCloser, { passive: true });
+addEventListener('resize', revealCloser);
+revealCloser();
 addEventListener('scroll', setFrost, { passive: true });
 addEventListener('resize', setFrost);
 window.__frostReady = true;
@@ -503,7 +536,8 @@ const finePointer = matchMedia('(pointer: fine)').matches, rootStyle = document.
 let lastPointer = -1e9, frameNo = 0;
 const glowEl = document.querySelector('.glow');
 let lightX = '', lightY = '';
-const endSection = document.querySelector('.end');
+const endSection = document.querySelector('.end'), cubeSlot = document.querySelector('.cube-slot');
+let lastSlot = 0;
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
 const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion(), _qs = new THREE.Quaternion();
 let qsLive = false;
@@ -605,12 +639,15 @@ r.setAnimationLoop(ms => {
     const want = endSection.getBoundingClientRect().top < innerHeight * 0.95 ? 'end' : 'top';
     if (want !== pageMode) { pageMode = want; scene.environment = envFor(on.hdri, on.page); }
   }
-  // in the closing footer the cube rises into the upper half, the statement sits below it
+  // in the closing footer the cube settles into a slot above the statement; slot, statement and button are centred together
   {
-    const f = Math.min(1, Math.max(0, 1 - endSection.getBoundingClientRect().top / innerHeight));
     const half = cam.position.z * Math.tan(THREE.MathUtils.degToRad(cam.fov / 2));
-    // on tall phones the cube rises less, so it stays close to the statement
-    holder.position.y += f * f * (3 - 2 * f) * (cam.aspect < 1 ? 0.18 : 0.42) * half;
+    const slotPx = Math.round(2.4 / (2 * half) * innerHeight);
+    if (slotPx !== lastSlot) { lastSlot = slotPx; rootStyle.setProperty('--slot', slotPx + 'px'); }
+    const f = Math.min(1, Math.max(0, 1 - endSection.getBoundingClientRect().top / innerHeight));
+    const sr = cubeSlot.getBoundingClientRect(), sy = sr.top + sr.height / 2;
+    const target = (0.5 - sy / innerHeight) * 2 * half;
+    holder.position.y += f * f * (3 - 2 * f) * target;
   }
   scene.environmentRotation.y = ax * 0.9;
   // one light for cube and paper: with a mouse the glow on the paper drifts with the reflections
