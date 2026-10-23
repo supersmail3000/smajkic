@@ -69,7 +69,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 rgba(0,0,0,.28),inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.28),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
 .light .cta span{color:#2b2b2b}.light .cta:hover span{color:#000}
 .light .grain{background-image:none}
-@media (max-width:720px){.closer p{font-size:24px}.closer p .mb{display:inline}.hero .foot{align-items:flex-end}.hero .foot .j span{display:block}}
+@media (max-width:720px){.closer p{font-size:24px}.closer p .mb{display:inline}.hero .foot{align-items:flex-end}.hero .foot .j>span{display:block}}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
@@ -81,9 +81,9 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .cta:active{box-shadow:inset 0 3px 0 #000,inset 0 11px 12px -2px #000,inset 0 -1px 0 rgba(255,255,255,.05)}
 .cta:focus-visible{outline:1px solid rgba(220,220,220,.6);outline-offset:4px}
 /* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
-.cta span{display:inline-block;color:#d4d4d4;transition:color .4s,transform .15s}
+.cta>span{display:inline-block;color:#d4d4d4;transition:color .4s,transform .15s}
 .cta:hover span{color:#fff}
-.cta:active span{color:#a8a8a8;transform:translateY(1px)}
+.cta:active span{color:#a8a8a8}.cta:active>span{transform:translateY(1px)}
 .j{text-align:justify;text-align-last:left;font-size:14px;color:#a8a8a8}
 .row{display:flex;justify-content:space-between;color:#7d7d7d;margin-top:4px}
 .noui .panel,.noui /* the light is its own fixed layer the size of the screen, moved on the gpu: safari ignores fixed page backgrounds */
@@ -91,6 +91,20 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .light .glow{background:radial-gradient(closest-side,rgba(255,255,255,.75),rgba(255,255,255,0))}
 </style>
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
+<style>
+/* corner type: a cursor runs through each text; every letter appears as its own edge out of a blur and turns to face the page as the next edge appears */
+.typed .ch{display:inline-block;position:relative;animation:tyblur .44s cubic-bezier(.3,0,.2,1) var(--dl) both}
+.typed .ch>.g{display:inline-block;position:relative;transform-style:preserve-3d;animation:tyin .05s ease var(--dl) both,tyturn .38s cubic-bezier(.4,0,.2,1) calc(var(--dl) + 60ms) both}
+.typed .ch>.g::before,.typed .ch>.g::after{content:'';position:absolute;top:14%;height:72%;width:1.5px;background:currentColor;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;animation:tyedge 1ms linear calc(var(--dl) + 440ms) both}
+.typed .ch>.g::before{left:0;transform-origin:0 50%;transform:rotateY(90deg)}
+.typed .ch>.g::after{right:0;transform-origin:100% 50%;transform:rotateY(-90deg)}
+.tywait .ch{opacity:0}
+@keyframes tyin{from{opacity:0}to{opacity:1}}
+@keyframes tyturn{from{transform:perspective(240px) rotateY(90deg)}to{transform:perspective(240px) rotateY(0)}}
+@keyframes tyedge{from{opacity:1}to{opacity:0}}
+@keyframes tyblur{0%{filter:blur(6px)}35%{filter:blur(3px)}100%{filter:blur(0)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
 </head>
 <body>
 <header><b role="button" tabindex="0" aria-label="switch light and dark">SMAIL SMAJKIC</b><span class="words"><span class="hw" data-m="0">PRODUCT</span>. <span class="hw" data-m="1">DESIGN</span>. <span class="hw" data-m="2">BRAND</span>.</span></header>
@@ -126,6 +140,43 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 </div></div>
 </div>
 
+<script>
+// type runs once: the corners on load, the closing screen when it is reached; one letter every 60 ms, the statement's lines run side by side
+(() => {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const $ = q => document.querySelector(q);
+  function split(root, start, perLine) {
+    if (!root) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+    while (walker.nextNode()) if (walker.currentNode.textContent.trim()) nodes.push(walker.currentNode);
+    let i = 0;
+    nodes.forEach((n, li) => {
+      if (perLine) i = 0;
+      const shown = document.createElement('span'), sr = document.createElement('span');
+      shown.setAttribute('aria-hidden', 'true'); sr.className = 'sr'; sr.textContent = n.textContent;
+      for (const part of n.textContent.split(/(\s+)/)) {
+        if (!part) continue;
+        if (/^\s+$/.test(part)) { shown.appendChild(document.createTextNode(part)); continue; }
+        const wd = document.createElement('span'); wd.style.whiteSpace = 'nowrap';
+        for (const c of part) {
+          const ch = document.createElement('span'), g = document.createElement('span');
+          ch.className = 'ch'; g.className = 'g'; g.textContent = c; ch.appendChild(g);
+          ch.style.setProperty('--dl', (start + (perLine ? li * 250 : 0) + i++ * 60) + 'ms');
+          wd.appendChild(ch);
+        }
+        shown.appendChild(wd);
+      }
+      n.replaceWith(shown, sr);
+    });
+  }
+  split($('header b'), 300); split($('header .words'), 550); split($('.hero .foot .j'), 1000); split($('.hero .foot .cta span'), 1300);
+  document.querySelector('header').classList.add('typed'); $('.hero .foot').classList.add('typed');
+  const end = $('.end .pin');
+  split($('.closer p'), 0, true); split($('.closer .cta span'), 1500); split($('.legal > span:first-child'), 300); split($('.legal > span:last-child'), 500);
+  end.classList.add('tywait');
+  new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { end.classList.remove('tywait'); end.classList.add('typed'); io.disconnect(); } }, { threshold: 0.5 }).observe($('.closer p'));
+})();
+</script>
 <script type="module">
 import * as THREE from 'three';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -537,34 +588,6 @@ function frostFrame() {
   grainEl.style.opacity = e.toFixed(3);
   requestAnimationFrame(frostFrame);
 }
-// the closer reads itself in: each letter goes from dim to full as the last screen scrolls in, done at the very bottom
-const closerP = document.querySelector('.closer p');
-const chars = [];
-{
-  // line breaks stay as they are (the mobile-only ones too), only the words between them are split
-  const parts = closerP.innerHTML.split(/(<br[^>]*>)/i);
-  closerP.setAttribute('aria-label', parts.filter(p => !p.startsWith('<br')).map(p => p.trim()).join(' '));
-  closerP.innerHTML = parts.map(part => part.startsWith('<br') ? part : part.trim().split(/\s+/).filter(Boolean).map(word =>
-    `<span class="w" aria-hidden="true">${[...word].map(ch => `<span class="c">${ch}</span>`).join('')}</span>`).join(' ')).join(' ');
-  chars.push(...closerP.querySelectorAll('.c'));
-}
-function revealCloser() {
-  if (reduced) { for (const c of chars) c.style.opacity = 1; return; }
-  const h = innerHeight, max = document.documentElement.scrollHeight - h;
-  // starts when the statement's top enters the viewport, ends when the page can scroll no further;
-  // measured against the pinned screen, which itself moves while it sticks
-  const pinEl = closerP.closest('.pin'), endTop = pinEl.parentElement.getBoundingClientRect().top + scrollY;
-  const start = Math.min(max - 1, endTop + closerP.getBoundingClientRect().top - pinEl.getBoundingClientRect().top - h);
-  const p = Math.min(1, Math.max(0, (scrollY - start) / (max - start)));
-  const soft = 6, head = p * (chars.length + soft);
-  chars.forEach((c, i) => {
-    const t = Math.min(1, Math.max(0, (head - i) / soft));
-    c.style.opacity = (0.22 + 0.78 * t).toFixed(3);
-  });
-}
-addEventListener('scroll', revealCloser, { passive: true });
-addEventListener('resize', revealCloser);
-revealCloser();
 addEventListener('scroll', setFrost, { passive: true });
 addEventListener('resize', setFrost);
 window.__frostReady = true;
