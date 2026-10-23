@@ -14,7 +14,7 @@
 <style>
 @font-face{font-family:'Geist';font-weight:300;src:url(/fonts/Geist-Light.woff2) format('woff2');font-display:swap}
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
-html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at var(--lx,22%) var(--ly,8%),rgba(255,255,255,.045),rgba(255,255,255,0) 55%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),var(--paper,#000);background-attachment:scroll,scroll,fixed,fixed,scroll}
+html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at var(--lx,22%) var(--ly,8%),rgba(255,255,255,var(--la,.08)),rgba(255,255,255,0) 55%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),var(--paper,#000);background-attachment:scroll,scroll,fixed,fixed,scroll}
 /* one paper for the whole page: grain, light from the upper left, a darker lower right */
 html,body{margin:0;color:#a8a8a8;font:14px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 /* the stage spans exactly the visible area, so on iphone the cube centres between the toolbars */
@@ -23,7 +23,7 @@ header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content
 header b{font-weight:400;color:#fff;font-size:14px;cursor:pointer;transition:color .8s}
 html{transition:background-color .8s}
 body,header,.j,.pd,.go,.pn,.wh,.legal,.legal a,.closer p,.cta span{transition:color .8s}
-.cta{transition:background .8s,box-shadow .8s}
+.cta{transition:background .8s}
 .hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
 main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .hero{position:fixed;inset:0;z-index:1;height:100vh;height:100svh;display:flex;flex-direction:column}
@@ -50,7 +50,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .light header b,.light .pn,.light .closer p{color:#111}
 .light .wh,.light .legal,.light .legal a{color:#8a8a8a}
 .light .go:hover,.light .legal a:hover,.light .hw:hover,.light .hw.on{color:#000}
-.light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset 0 2px 0 rgba(0,0,0,.28),inset 0 7px 9px -2px rgba(0,0,0,.28),inset 0 -1px 0 rgba(255,255,255,.9)}
+.light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 rgba(0,0,0,.28),inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.28),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
 .light .cta span{color:#2b2b2b}.light .cta:hover span{color:#000}
 .light .grain{background-image:none}
 @media (max-width:720px){.closer p{font-size:24px}.hero .foot{align-items:flex-end}.hero .foot .j span{display:block}}
@@ -59,7 +59,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
-.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:9px 22px 11px;background:linear-gradient(#060606,#0a0a0a);box-shadow:inset 0 2px 0 #000,inset 0 7px 9px -2px rgba(0,0,0,.95),inset 0 -1px 0 rgba(255,255,255,.12);transition:background .5s,box-shadow .25s}
+.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:9px 22px 11px;background:linear-gradient(#060606,#0a0a0a);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 #000,inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.95),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.12);transition:background .5s,box-shadow .25s}
 /* states read as the paper: hover lets a little light into the window, press pushes it deeper, focus gets a fine silver ring */
 .cta:hover{background:linear-gradient(#0b0b0b,#121212)}
 .cta:active{box-shadow:inset 0 3px 0 #000,inset 0 11px 12px -2px #000,inset 0 -1px 0 rgba(255,255,255,.05)}
@@ -113,6 +113,7 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const qs = new URLSearchParams(location.search);
 if (!qs.has('ui')) document.documentElement.classList.add('noui');
+
 // light and dark: a click on the name switches, the choice is remembered for this viewer
 let stored = null; try { stored = localStorage.getItem('theme'); } catch (e) {}
 let LIGHT = qs.has('light') || stored === 'light';
@@ -515,6 +516,8 @@ r.setAnimationLoop(ms => {
   // with no hand on the mouse (always on a phone) the light drifts by itself, slowly, and takes the cube along
   if (!finePointer || performance.now() - lastPointer > 4000) { px = Math.sin(t * 0.09) * 0.32 + Math.sin(t * 0.037) * 0.12; py = Math.sin(t * 0.071 + 1) * 0.22; }
   cx += (px - cx) * 0.04; cy += (py - cy) * 0.04;
+  // the light wanders by itself, the same on every screen; cube reflections and the glow on the paper follow it
+  const ax = Math.sin(t * 0.09) * 0.32 + Math.sin(t * 0.037) * 0.12, ay = Math.sin(t * 0.071 + 1) * 0.22;
   scrollV *= 0.9;
   freeze = 0;
   proxS += ((on.react ? prox : 0) - proxS) * 0.05;
@@ -595,11 +598,11 @@ r.setAnimationLoop(ms => {
     // on tall phones the cube rises less, so it stays close to the statement
     holder.position.y += f * f * (3 - 2 * f) * (cam.aspect < 1 ? 0.18 : 0.42) * half;
   }
-  scene.environmentRotation.y = cx * 0.9;
+  scene.environmentRotation.y = ax * 0.9;
   // one light for cube and paper: with a mouse the glow on the paper drifts with the reflections
   if (finePointer || (frameNo++ & 3) === 0) {
-    const lx = (22 + cx * 34).toFixed(1), ly = (8 + cy * 22).toFixed(1);
-    if (lx !== lightX || ly !== lightY) { lightX = lx; lightY = ly; rootStyle.setProperty('--lx', lx + '%'); rootStyle.setProperty('--ly', ly + '%'); }
+    const lx = (22 + ax * 34).toFixed(1), ly = (8 + ay * 22).toFixed(1);
+    if (lx !== lightX || ly !== lightY) { lightX = lx; lightY = ly; rootStyle.setProperty('--lx', lx + '%'); rootStyle.setProperty('--ly', ly + '%'); rootStyle.setProperty('--lsx', (-ax * 4).toFixed(2)); }
   }
   r.render(scene, cam);
 });
