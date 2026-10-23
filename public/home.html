@@ -93,15 +93,17 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
 <style>
 /* corner type: a cursor runs through each text; every letter appears as its own edge out of a blur and turns to face the page as the next edge appears */
-.typed .ch{display:inline-block;position:relative;animation:tyblur .44s cubic-bezier(.3,0,.2,1) var(--dl) both}
-.typed .ch>.g{display:inline-block;position:relative;transform-style:preserve-3d;animation:tyin .05s ease var(--dl) both,tyturn .38s cubic-bezier(.4,0,.2,1) calc(var(--dl) + 60ms) both}
-.typed .ch>.g::before,.typed .ch>.g::after{content:'';position:absolute;top:14%;height:72%;width:1.5px;background:currentColor;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;animation:tyedge 1ms linear calc(var(--dl) + 440ms) both}
-.typed .ch>.g::before{left:0;transform-origin:0 50%;transform:rotateY(90deg)}
-.typed .ch>.g::after{right:0;transform-origin:100% 50%;transform:rotateY(-90deg)}
-.tywait .ch{opacity:0}
-@keyframes tyin{from{opacity:0}to{opacity:1}}
+/* only the letters turning right now carry anything: waiting letters are just transparent, finished ones plain text again */
+.typed .ch{display:inline-block;position:relative;opacity:0}
+.typed .ch>.g{display:inline-block;position:relative}
+.typed .ch.go{opacity:1;animation:tyblur .44s cubic-bezier(.3,0,.2,1)}
+.typed .ch.go>.g{transform-style:preserve-3d;animation:tyturn .38s cubic-bezier(.4,0,.2,1) 60ms backwards}
+.typed .ch.go>.g::before,.typed .ch.go>.g::after{content:'';position:absolute;top:14%;height:72%;width:1.5px;background:currentColor;backface-visibility:hidden;-webkit-backface-visibility:hidden;pointer-events:none;opacity:0}
+.typed .ch.go>.g::before{left:0;transform-origin:0 50%;animation:tyedgel .44s linear}
+.typed .ch.go>.g::after{right:0;transform-origin:100% 50%;animation:tyedger .44s linear}
 @keyframes tyturn{from{transform:perspective(240px) rotateY(90deg)}to{transform:perspective(240px) rotateY(0)}}
-@keyframes tyedge{from{opacity:1}to{opacity:0}}
+@keyframes tyedgel{from,to{opacity:1;transform:rotateY(90deg)}}
+@keyframes tyedger{from,to{opacity:1;transform:rotateY(-90deg)}}
 @keyframes tyblur{0%{filter:blur(6px)}35%{filter:blur(3px)}100%{filter:blur(0)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
@@ -147,7 +149,17 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
   const $ = q => document.querySelector(q);
   // once a group has turned in, its letters go back to plain text, so no 3d layers stay behind over the cube
   const done = new Map();
-  function settle(el) { setTimeout(() => { for (const [shown, sr, n] of done.get(el) || []) { shown.replaceWith(n); sr.remove(); } el.classList.remove('typed'); }, (+el.dataset.tyEnd || 0) + 600); }
+  function settle(el) { for (const [shown, sr, n] of done.get(el) || []) { shown.replaceWith(n); sr.remove(); } el.classList.remove('typed'); }
+  // one frame loop per group switches each letter on at its moment, then hands the text back
+  function run(el) {
+    const letters = [...el.querySelectorAll('.ch')].sort((a, b) => a.dataset.dl - b.dataset.dl), t0 = performance.now();
+    let k = 0;
+    (function tick() {
+      const t = performance.now() - t0;
+      while (k < letters.length && +letters[k].dataset.dl <= t) letters[k++].classList.add('go');
+      if (k < letters.length || t < (+el.dataset.tyEnd || 0) + 600) requestAnimationFrame(tick); else settle(el);
+    })();
+  }
   function split(root, start) {
     if (!root) return;
     const host = root.closest('header, .foot, .pin');
@@ -165,7 +177,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
         for (const c of part) {
           const ch = document.createElement('span'), g = document.createElement('span');
           ch.className = 'ch'; g.className = 'g'; g.textContent = c; ch.appendChild(g);
-          ch.style.setProperty('--dl', (start + i++ * 60) + 'ms');
+          ch.dataset.dl = start + i++ * 60;
           wd.appendChild(ch);
         }
         shown.appendChild(wd);
@@ -175,11 +187,11 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
     });
   }
   split($('header b'), 300); split($('header .words'), 550); split($('.hero .foot .j'), 1000); split($('.hero .foot .cta span'), 1300);
-  for (const el of [$('header'), $('.hero .foot')]) { el.classList.add('typed'); settle(el); }
+  for (const el of [$('header'), $('.hero .foot')]) { el.classList.add('typed'); run(el); }
   const end = $('.end .pin');
   split($('.legal > span:first-child'), 0); split($('.legal > span:last-child'), 200);
-  end.classList.add('tywait');
-  new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { end.classList.remove('tywait'); end.classList.add('typed'); settle(end); io.disconnect(); } }, { threshold: 0.5 }).observe($('.legal'));
+  end.classList.add('typed');
+  new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { run(end); io.disconnect(); } }, { threshold: 0.5 }).observe($('.legal'));
 })();
 </script>
 <script type="module">
