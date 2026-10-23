@@ -19,7 +19,10 @@ html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg
 html,body{margin:0;color:#a8a8a8;font:14px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 #stage{display:block;position:fixed;inset:0;width:100%;height:100vh;z-index:0;background:transparent}
 header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
-header b{font-weight:400;color:#fff;font-size:14px}
+header b{font-weight:400;color:#fff;font-size:14px;cursor:pointer;transition:color .8s}
+html{transition:background-color .8s}
+body,header,.j,.pd,.go,.pn,.wh,.legal,.legal a,.closer p,.cta span{transition:color .8s}
+.cta{transition:background .8s,box-shadow .8s}
 .hw{cursor:pointer;transition:color .4s}.hw:hover,.hw.on{color:#fff}
 main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .hero{position:fixed;inset:0;z-index:1;height:100vh;height:100svh;display:flex;flex-direction:column}
@@ -40,6 +43,15 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .end{min-height:100vh;min-height:100svh;display:flex;flex-direction:column}
 .closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:32px 32px 96px;gap:40px}
 .closer p{margin:0;max-width:880px;color:#fff;font-size:32px;line-height:1.25}
+/* light mode: pale studio paper, dark type, the same cut window pressed into a light board */
+html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.12),rgba(0,0,0,0) 70%);background-attachment:scroll,fixed,fixed}
+.light body,.light header,.light .j,.light .pd,.light .go{color:#5a5a5a}
+.light header b,.light .pn,.light .closer p{color:#111}
+.light .wh,.light .legal,.light .legal a{color:#8a8a8a}
+.light .go:hover,.light .legal a:hover,.light .hw:hover,.light .hw.on{color:#000}
+.light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset 0 2px 0 rgba(0,0,0,.28),inset 0 7px 9px -2px rgba(0,0,0,.28),inset 0 -1px 0 rgba(255,255,255,.9)}
+.light .cta span{color:#2b2b2b}.light .cta:hover span{color:#000}
+.light .grain{background-image:none}
 @media (max-width:720px){.closer p{font-size:24px}.hero .foot{align-items:flex-end}.hero .foot .j span{display:block}}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
@@ -61,7 +73,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 <script type="importmap">{"imports":{"three":"/vendor/three/build/three.module.js","three/addons/":"/vendor/three/examples/jsm/"}}</script>
 </head>
 <body>
-<header><b>SMAIL SMAJKIC</b><span class="words"><span class="hw" data-m="0">PRODUCT</span>. <span class="hw" data-m="1">DESIGN</span>. <span class="hw" data-m="2">BRAND</span>.</span></header>
+<header><b role="button" tabindex="0" aria-label="switch light and dark">SMAIL SMAJKIC</b><span class="words"><span class="hw" data-m="0">PRODUCT</span>. <span class="hw" data-m="1">DESIGN</span>. <span class="hw" data-m="2">BRAND</span>.</span></header>
 <canvas id="stage"></canvas>
 <div class="hero">
 <footer class="foot">
@@ -100,6 +112,10 @@ import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 
 const qs = new URLSearchParams(location.search);
 if (!qs.has('ui')) document.documentElement.classList.add('noui');
+// light and dark: a click on the name switches, the choice is remembered for this viewer
+let stored = null; try { stored = localStorage.getItem('theme'); } catch (e) {}
+let LIGHT = qs.has('light') || stored === 'light';
+document.documentElement.classList.toggle('light', LIGHT);
 
 { const k = +(qs.get('k') || 100); const v = Math.round((100 - k) / 100 * 255).toString(16).padStart(2, '0'); document.documentElement.style.setProperty('--paper', '#' + v + v + v); }
 const off = (qs.get('off') || '').split(',');
@@ -163,27 +179,27 @@ endTex.colorSpace = THREE.SRGBColorSpace;
 let pageMode = 'top';
 function drawEnd() {
   const g = endCanvas.getContext('2d');
-  g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 1024);
-  g.textAlign = 'center'; g.fillStyle = '#fff';
+  g.fillStyle = LIGHT ? '#e4e4e2' : '#000'; g.fillRect(0, 0, 2048, 1024);
+  g.textAlign = 'center'; g.fillStyle = LIGHT ? '#111' : '#fff';
   g.font = "150px 'Geist Pixel'";
   g.fillText('15 YEARS OF PRODUCT DESIGN.', 1024, 400);
   g.fillText('THE PROBLEM STILL COMES FIRST.', 1024, 580);
-  g.font = "96px 'Geist Pixel'"; g.fillStyle = '#c8c8c8';
+  g.font = "96px 'Geist Pixel'"; g.fillStyle = LIGHT ? '#4a4a4a' : '#c8c8c8';
   g.fillText('WORK WITH ME.', 1024, 800);
   endTex.needsUpdate = true;
 }
 async function drawPage() {
   await document.fonts.load("64px 'Geist Pixel'");
   const g = pageCanvas.getContext('2d');
-  g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 1024);
-  g.textAlign = 'center'; g.fillStyle = '#fff';
+  g.fillStyle = LIGHT ? '#e4e4e2' : '#000'; g.fillRect(0, 0, 2048, 1024);
+  g.textAlign = 'center'; g.fillStyle = LIGHT ? '#111' : '#fff';
   g.font = "230px 'Geist Pixel'";
   g.fillText('SMAIL SMAJKIC', 1024, 270);
-  g.font = "96px 'Geist Pixel'"; g.fillStyle = '#c8c8c8';
+  g.font = "96px 'Geist Pixel'"; g.fillStyle = LIGHT ? '#4a4a4a' : '#c8c8c8';
   g.fillText('PRODUCT. DESIGN. BRAND.', 1024, 420);
   g.fillText('FIND THE PROBLEM. SHAPE THE PRODUCT.', 1024, 640);
   g.fillText('BUILD THE BRAND.', 1024, 760);
-  g.fillStyle = '#fff'; g.fillText('WORK WITH ME.', 1024, 940);
+  g.fillStyle = LIGHT ? '#111' : '#fff'; g.fillText('WORK WITH ME.', 1024, 940);
   pageTex.needsUpdate = true;
   drawEnd();
   return;
@@ -202,7 +218,8 @@ const pmrem = new THREE.PMREMGenerator(r);
 const envCache = new Map();
 function envFor(hdri, page, mode = pageMode) {
   const hd = HDRIS[hdriIdx], hdrTex = hdri ? hdrTexs[hd.file] : null, ok = hdrTex && hdrTex !== 'loading';
-  const key = `${ok ? hdriIdx : 'x'}${page ? 1 : 0}${mode}`;
+  const key = `${ok ? hdriIdx : 'x'}${page ? 1 : 0}${mode}${LIGHT ? 'L' : 'D'}`;
+  const pk = LIGHT ? 0.16 : 1;
   const pt = mode === 'end' ? endTex : pageTex;
   if (envCache.has(key)) return envCache.get(key);
   const env = new THREE.Scene();
@@ -224,10 +241,10 @@ function envFor(hdri, page, mode = pageMode) {
   softbox(env, 0.5, 10, [7, 0, -8], 9);
   if (page) {
     // the page wraps the cube: in front, both sides and above, so a turned face still catches it
-    softbox(env, 24, 12, [0, 0.5, 5.5], 10, pt);
-    softbox(env, 20, 10, [-6.5, 0.5, 1], 7, pt);
-    softbox(env, 20, 10, [6.5, 0.5, 1], 7, pt);
-    softbox(env, 18, 9, [0, 6.5, 2], 5, pt);
+    softbox(env, 24, 12, [0, 0.5, 5.5], 10 * pk, pt);
+    softbox(env, 20, 10, [-6.5, 0.5, 1], 7 * pk, pt);
+    softbox(env, 20, 10, [6.5, 0.5, 1], 7 * pk, pt);
+    softbox(env, 18, 9, [0, 6.5, 2], 5 * pk, pt);
   }
   const tex = pmrem.fromScene(env, 0, 0.1, 100, { size: 1024 }).texture;
   envCache.set(key, tex);
@@ -259,7 +276,32 @@ const geoCoarse = null, geoDense = cubeGeo(150);
 
 // ---------- material: obsidian, deformation and micro surface in the shader ----------
 const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 }, uEng: { value: null }, uEngOn: { value: 0 }, uNM: { value: new THREE.Matrix3() }, uMorph: { value: new THREE.Vector3() }, uMSign: { value: new THREE.Vector3(1, 1, 1) }, uTime: { value: 0 } };
-const mat = new THREE.MeshPhysicalMaterial({ color: 0x15161a, metalness: 1, roughness: 0.015, clearcoat: 1, clearcoatRoughness: 0.005, envMapIntensity: 1.9 });
+const LOOKS = {
+  dark: { color: new THREE.Color(0x15161a), roughness: 0.015, clearcoat: 1, clearcoatRoughness: 0.005, envMapIntensity: 1.9 },
+  light: { color: new THREE.Color(0xd6d8dc), roughness: 0.03, clearcoat: 0.4, clearcoatRoughness: 0.02, envMapIntensity: 1.25 },
+};
+const start = LOOKS[LIGHT ? 'light' : 'dark'];
+const mat = new THREE.MeshPhysicalMaterial({ color: start.color.clone(), metalness: 1, roughness: start.roughness, clearcoat: start.clearcoat, clearcoatRoughness: start.clearcoatRoughness, envMapIntensity: start.envMapIntensity });
+// the cube changes its metal over about a second instead of jumping
+function lookFrame() {
+  const L = LOOKS[LIGHT ? 'light' : 'dark'], k = 0.06;
+  mat.color.lerp(L.color, k);
+  for (const key of ['roughness', 'clearcoat', 'clearcoatRoughness', 'envMapIntensity']) mat[key] += (L[key] - mat[key]) * k;
+  requestAnimationFrame(lookFrame);
+}
+requestAnimationFrame(lookFrame);
+function toggleTheme() {
+  LIGHT = !LIGHT;
+  document.documentElement.classList.toggle('light', LIGHT);
+  try { localStorage.setItem('theme', LIGHT ? 'light' : 'dark'); } catch (e) {}
+  const tc = document.querySelector('meta[name="theme-color"]'); if (tc) tc.content = LIGHT ? '#e4e4e2' : '#000000';
+  drawPage().then(() => applyEnv());
+}
+{
+  const nameEl = document.querySelector('header b');
+  nameEl.addEventListener('click', toggleTheme);
+  nameEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTheme(); } });
+}
 const NOISE = `
 float h3(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
 float vn3(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
@@ -431,7 +473,7 @@ function frostFrame() {
   const e = frostCur * frostCur * (3 - 2 * frostCur);
   const b = `blur(${(64 * e).toFixed(1)}px)`;
   frost.style.backdropFilter = frost.style.webkitBackdropFilter = e > 0.002 ? b : 'none';
-  frost.style.background = `rgba(0,0,0,${(0.25 * e).toFixed(3)})`;
+  frost.style.background = LIGHT ? `rgba(240,240,238,${(0.45 * e).toFixed(3)})` : `rgba(0,0,0,${(0.25 * e).toFixed(3)})`;
   grainEl.style.opacity = e.toFixed(3);
   requestAnimationFrame(frostFrame);
 }
