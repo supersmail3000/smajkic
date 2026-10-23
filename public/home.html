@@ -156,6 +156,22 @@ function loadHdri(i) {
 const pageCanvas = document.createElement('canvas'); pageCanvas.width = 2048; pageCanvas.height = 1024;
 const pageTex = new THREE.CanvasTexture(pageCanvas);
 pageTex.colorSpace = THREE.SRGBColorSpace;
+// the footer has its own surroundings: the closing statement and the button, mirrored there instead of the first screen
+const endCanvas = document.createElement('canvas'); endCanvas.width = 2048; endCanvas.height = 1024;
+const endTex = new THREE.CanvasTexture(endCanvas);
+endTex.colorSpace = THREE.SRGBColorSpace;
+let pageMode = 'top';
+function drawEnd() {
+  const g = endCanvas.getContext('2d');
+  g.fillStyle = '#000'; g.fillRect(0, 0, 2048, 1024);
+  g.textAlign = 'center'; g.fillStyle = '#fff';
+  g.font = "150px 'Geist Pixel'";
+  g.fillText('15 YEARS OF PRODUCT DESIGN.', 1024, 400);
+  g.fillText('THE PROBLEM STILL COMES FIRST.', 1024, 580);
+  g.font = "96px 'Geist Pixel'"; g.fillStyle = '#c8c8c8';
+  g.fillText('WORK WITH ME.', 1024, 800);
+  endTex.needsUpdate = true;
+}
 async function drawPage() {
   await document.fonts.load("64px 'Geist Pixel'");
   const g = pageCanvas.getContext('2d');
@@ -169,6 +185,7 @@ async function drawPage() {
   g.fillText('BUILD THE BRAND.', 1024, 760);
   g.fillStyle = '#fff'; g.fillText('WORK WITH ME.', 1024, 940);
   pageTex.needsUpdate = true;
+  drawEnd();
   return;
   g.textAlign = 'left'; g.font = "54px 'Geist Pixel'";
   const words = document.querySelector('.j').textContent.split(' ');
@@ -183,9 +200,10 @@ async function drawPage() {
 
 const pmrem = new THREE.PMREMGenerator(r);
 const envCache = new Map();
-function envFor(hdri, page) {
+function envFor(hdri, page, mode = pageMode) {
   const hd = HDRIS[hdriIdx], hdrTex = hdri ? hdrTexs[hd.file] : null, ok = hdrTex && hdrTex !== 'loading';
-  const key = `${ok ? hdriIdx : 'x'}${page ? 1 : 0}`;
+  const key = `${ok ? hdriIdx : 'x'}${page ? 1 : 0}${mode}`;
+  const pt = mode === 'end' ? endTex : pageTex;
   if (envCache.has(key)) return envCache.get(key);
   const env = new THREE.Scene();
   if (ok) {
@@ -206,16 +224,16 @@ function envFor(hdri, page) {
   softbox(env, 0.5, 10, [7, 0, -8], 9);
   if (page) {
     // the page wraps the cube: in front, both sides and above, so a turned face still catches it
-    softbox(env, 24, 12, [0, 0.5, 5.5], 10, pageTex);
-    softbox(env, 20, 10, [-6.5, 0.5, 1], 7, pageTex);
-    softbox(env, 20, 10, [6.5, 0.5, 1], 7, pageTex);
-    softbox(env, 18, 9, [0, 6.5, 2], 5, pageTex);
+    softbox(env, 24, 12, [0, 0.5, 5.5], 10, pt);
+    softbox(env, 20, 10, [-6.5, 0.5, 1], 7, pt);
+    softbox(env, 20, 10, [6.5, 0.5, 1], 7, pt);
+    softbox(env, 18, 9, [0, 6.5, 2], 5, pt);
   }
   const tex = pmrem.fromScene(env, 0, 0.1, 100, { size: 1024 }).texture;
   envCache.set(key, tex);
   return tex;
 }
-function applyEnv() { if (on.hdri) loadHdri(hdriIdx); scene.environment = envFor(on.hdri, on.page); }
+function applyEnv() { if (on.hdri) loadHdri(hdriIdx); scene.environment = envFor(on.hdri, on.page); if (on.page) setTimeout(() => envFor(on.hdri, on.page, pageMode === 'end' ? 'top' : 'end'), 300); }
 
 // ---------- geometry: rounded cube, dense near the edges ----------
 const S = 1.6, H = S / 2, RAD = 0.035;
@@ -518,6 +536,10 @@ r.setAnimationLoop(ms => {
     _qs.slerp(_qt, 0.045);
     cube.quaternion.slerpQuaternions(_qd, _qs, morphState.focus * morphState.focus * (3 - 2 * morphState.focus));
   } else qsLive = false;
+  {
+    const want = endSection.getBoundingClientRect().top < innerHeight * 0.95 ? 'end' : 'top';
+    if (want !== pageMode) { pageMode = want; scene.environment = envFor(on.hdri, on.page); }
+  }
   // in the closing footer the cube rises into the upper half, the statement sits below it
   {
     const f = Math.min(1, Math.max(0, 1 - endSection.getBoundingClientRect().top / innerHeight));
