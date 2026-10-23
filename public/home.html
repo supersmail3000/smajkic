@@ -441,7 +441,7 @@ drawPage().then(() => { envCache.clear(); applyEnv(); });
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let px = 0, py = 0, cx = 0, cy = 0, prox = 0, scrollV = 0, lastY = scrollY, freeze = 0;
 addEventListener('pointermove', e => {
-  px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5;
+  px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5; lastPointer = performance.now();
   const rc = cv.getBoundingClientRect();
   const dx = e.clientX - (rc.left + rc.width / 2), dy = e.clientY - (rc.top + rc.height / 2);
   prox = 1 - Math.min(1, Math.hypot(dx, dy) / (rc.height * 0.4));
@@ -486,6 +486,7 @@ requestAnimationFrame(frostFrame);
 
 let prev = 0, t = 0, proxS = 0, proxWas = 0;
 const finePointer = matchMedia('(pointer: fine)').matches, rootStyle = document.documentElement.style;
+let lastPointer = -1e9, frameNo = 0;
 let lightX = '', lightY = '';
 const endSection = document.querySelector('.end');
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
@@ -511,6 +512,8 @@ r.setAnimationLoop(ms => {
   const dt = Math.min(0.05, (ms - prev) / 1000); prev = ms;
   if (reduced) { r.render(scene, cam); return; }
   t += dt;
+  // with no hand on the mouse (always on a phone) the light drifts by itself, slowly, and takes the cube along
+  if (!finePointer || performance.now() - lastPointer > 4000) { px = Math.sin(t * 0.09) * 0.32 + Math.sin(t * 0.037) * 0.12; py = Math.sin(t * 0.071 + 1) * 0.22; }
   cx += (px - cx) * 0.04; cy += (py - cy) * 0.04;
   scrollV *= 0.9;
   freeze = 0;
@@ -594,7 +597,7 @@ r.setAnimationLoop(ms => {
   }
   scene.environmentRotation.y = cx * 0.9;
   // one light for cube and paper: with a mouse the glow on the paper drifts with the reflections
-  if (finePointer) {
+  if (finePointer || (frameNo++ & 3) === 0) {
     const lx = (22 + cx * 34).toFixed(1), ly = (8 + cy * 22).toFixed(1);
     if (lx !== lightX || ly !== lightY) { lightX = lx; lightY = ly; rootStyle.setProperty('--lx', lx + '%'); rootStyle.setProperty('--ly', ly + '%'); }
   }
