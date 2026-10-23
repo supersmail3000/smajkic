@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ImprintContent from "./content";
 
 export const metadata: Metadata = {
-  title: "Imprint — Smail Smajkic",
+  title: "imprint — smail smajkic",
   robots: { index: false },
 };
 

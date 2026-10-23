@@ -3,20 +3,23 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 
+const description = "find the problem. shape the product. build the brand.";
+
+// same values as the head of public/home.html, so imprint and privacy preview the same way
 export const metadata: Metadata = {
   metadataBase: new URL("https://smailsmajkic.com"),
-  title: "Smail Smajkic — 0 to 1 Product Designer",
-  description:
-    "0 to 1 Product Designer from Munich. Product design, design systems, brand and visual storytelling — through my company SUPERSMAIL.",
+  title: "smail smajkic",
+  description,
   openGraph: {
-    title: "Smail Smajkic — 0 to 1 Product Designer",
-    description:
-      "0 to 1 Product Designer from Munich. Product design, design systems, brand and visual storytelling.",
+    title: "smail smajkic",
+    description,
     url: "https://smailsmajkic.com",
-    siteName: "Smail Smajkic",
+    siteName: "smail smajkic",
     locale: "en_US",
     type: "website",
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "a black chrome cube floating on black" }],
   },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

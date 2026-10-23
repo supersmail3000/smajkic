@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PrivacyContent from "./content";
 
 export const metadata: Metadata = {
-  title: "Privacy — Smail Smajkic",
+  title: "privacy — smail smajkic",
   robots: { index: false },
 };
 
