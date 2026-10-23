@@ -39,7 +39,7 @@ body,header,.j,.pd,.go,.pn,.wh,.legal,.legal a,.closer p,.cta span{transition:co
 main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .hero{position:fixed;inset:0;z-index:1;height:100vh;height:100svh;display:flex;flex-direction:column}
 .hero .foot{margin-top:auto}
-.sheet{position:relative;z-index:3;margin-top:100vh;margin-top:100svh}
+.sheet{position:relative;z-index:3;margin-top:160vh;margin-top:160svh}
 .frost{position:fixed;inset:0;z-index:2;pointer-events:none}
 /* the glass blurs the paper's grain away, so the grain is laid again on top of it, as strong as the glass is milky */
 .grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;background:
@@ -291,7 +291,7 @@ function cubeGeo(N) {
 const geoCoarse = null, geoDense = cubeGeo(150);
 
 // ---------- material: obsidian, deformation and micro surface in the shader ----------
-const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 }, uEng: { value: null }, uEngOn: { value: 0 }, uNM: { value: new THREE.Matrix3() }, uPage: { value: pageTex }, uPageOn: { value: 1 }, uPk: { value: LIGHT ? 0.16 : 1 }, uEnvRot: { value: new THREE.Matrix3() }, uMorph: { value: new THREE.Vector3() }, uMSign: { value: new THREE.Vector3(1, 1, 1) }, uTime: { value: 0 } };
+const U = { uPhase: { value: 0 }, uWave: { value: 0 }, uAmp: { value: 1 }, uMode: { value: mode }, uH: { value: H }, uMicro: { value: 1 }, uFine: { value: 1 }, uEng: { value: null }, uEngOn: { value: 0 }, uNM: { value: new THREE.Matrix3() }, uPage: { value: pageTex }, uPageOn: { value: 1 }, uPk: { value: LIGHT ? 0.16 : 1 }, uEnvRot: { value: new THREE.Matrix3() }, uMorph: { value: new THREE.Vector3() }, uMSign: { value: new THREE.Vector3(1, 1, 1) }, uTime: { value: 0 }, uLiq: { value: 0 }, uSl: { value: 0 }, uDn: { value: new THREE.Vector3(0, -1, 0) } };
 const LOOKS = {
   dark: { color: new THREE.Color(0x15161a), roughness: 0.015, clearcoat: 1, clearcoatRoughness: 0.005, envMapIntensity: 1.9 },
   light: { color: new THREE.Color(0xd6d8dc), roughness: 0.03, clearcoat: 0.4, clearcoatRoughness: 0.02, envMapIntensity: 1.25 },
@@ -388,6 +388,14 @@ vec3 shapeT(vec3 p,float k){
   if(k<.5){vec3 a=abs(d);float e=5.;float r=pow(pow(a.x,e)+pow(a.y,e)+pow(a.z,e),-1./e);return d*r*vec3(.22,.95,.95);}
   float e=12.;float r=pow(pow(length(d.xz),e)+pow(abs(d.y),e),-1./e);return d*r*vec3(1.05,.09,1.05);}
 float cwf(vec3 p){vec3 a=abs(p/uH);float mx=max(a.x,max(a.y,a.z)),mn=min(a.x,min(a.y,a.z)),md=a.x+a.y+a.z-mx-mn;return max(0.,1.-mn*mn)*max(0.,1.-md*md);}
+uniform float uLiq,uSl; uniform vec3 uDn;
+// mercury: scrolling melts the cube into a drop that settles into a pool; gravity stays world-down
+vec3 melt(vec3 q,vec3 p){
+  if(uLiq<.001)return q;
+  vec3 d=normalize(p);q=mix(q,d,smoothstep(0.,.45,uLiq));
+  float f=smoothstep(.35,1.,uLiq),a=dot(q,uDn);vec3 lat=q-uDn*a;
+  q=uDn*mix(a,.5*a+.45,f)+lat*(1.+.38*f);
+  return q+d*sin(dot(p,vec3(4.1,2.9,3.6))+uTime*3.)*.02*f+uDn*dot(q,uDn)*uSl*.25;}
 vec3 disp(vec3 p,vec3 n){
   float waves=sin(p.x*2.3+uWave*.9)*sin(p.y*2.7-uWave*.7)*sin(p.z*2.1+uWave*.55)+.5*uFine*sin(p.x*4.1-p.y*3.3+uWave*1.3)*sin(p.z*3.7+uWave*.8);
   float mono=cwf(p)*sin(uPhase);
@@ -397,7 +405,8 @@ vec3 disp(vec3 p,vec3 n){
   q=q*(1.-w.x-w.y-w.z)+(shapeT(p,0.)+normalize(p)*mono*.02)*w.x+shapeT(p,1.)*w.y+(shapeT(p,2.)+normalize(p)*mono*.02)*w.z;
   // the spring's overshoot swells the shape instead of pulling the cube back through it
   vec3 ov=uMorph-mc;q*=1.+(ov.x+ov.y+ov.z)*.6;
-  return q+normalize(p)*waves*.075*max(0.,uAmp-1.35)*.6;}`)
+  q+=normalize(p)*waves*.075*max(0.,uAmp-1.35)*.6;
+  return melt(q,p);}`)
     .replace('#include <beginnormal_vertex>', `vec3 objectNormal;{
   vec3 n=normalize(normal);vec3 a=abs(n.y)<.99?vec3(0,1,0):vec3(1,0,0);
   vec3 t1=normalize(cross(n,a)),t2=cross(n,t1);float e=.004;
@@ -497,11 +506,24 @@ addEventListener('scroll', fadeFoot, { passive: true });
 fadeFoot();
 const grainEl = document.querySelector('.grain'), frost = document.querySelector('.frost'), endEl = document.querySelector('.end'), workEl = document.querySelector('.work');
 let frostTarget = 0, frostCur = 0;
+const MELT = 0.6;
+const liq = { y: scrollY, sl: 0, slv: 0, m: 0 }, _iq = new THREE.Quaternion();
+function meltStep() {
+  const vel = (scrollY - liq.y) / innerHeight; liq.y = scrollY;
+  // the scroll kicks the pool, surface tension pulls it back
+  liq.slv += vel * 0.9 - liq.sl * 0.06; liq.slv *= 0.9; liq.sl = Math.max(-1.2, Math.min(1.2, liq.sl + liq.slv));
+  liq.m += (Math.min(1, scrollY / (innerHeight * MELT)) - liq.m) * 0.06;
+  // in the closing footer the cube is solid again for its own morphs
+  const k = Math.min(1, Math.max(0, endSection.getBoundingClientRect().top / innerHeight));
+  U.uLiq.value = liq.m * k; U.uSl.value = liq.sl * k;
+  U.uDn.value.set(0, -1, 0).applyQuaternion(_iq.copy(cube.quaternion).invert());
+}
 function setFrost() {
   const h = innerHeight, clamp = v => Math.min(1, Math.max(0, v));
   // full frost once LATEST WORK sits at 60 % of the viewport, clears again before the closer
   const full = workEl.getBoundingClientRect().top + scrollY + 128 - h * 0.6;
-  const pin = clamp(scrollY / full);
+  // the cube melts in a stretch of its own, the frost only starts once it lies as a pool
+  const m0 = h * MELT, pin = clamp((scrollY - m0) / (full - m0));
   const pout = clamp((scrollY + h - (endEl.getBoundingClientRect().top + scrollY)) / (h * 0.6));
   frostTarget = on.glass ? pin * (1 - pout) : 0;
 }
@@ -509,7 +531,7 @@ function frostFrame() {
   frostCur += (frostTarget - frostCur) * 0.08;
   if (Math.abs(frostTarget - frostCur) < 0.0005) frostCur = frostTarget;
   const e = frostCur * frostCur * (3 - 2 * frostCur);
-  const b = `blur(${(64 * e).toFixed(1)}px)`;
+  const b = `blur(${(16 * e).toFixed(1)}px)`;
   frost.style.backdropFilter = frost.style.webkitBackdropFilter = e > 0.002 ? b : 'none';
   frost.style.background = LIGHT ? `rgba(240,240,238,${(0.45 * e).toFixed(3)})` : `rgba(0,0,0,${(0.25 * e).toFixed(3)})`;
   grainEl.style.opacity = e.toFixed(3);
@@ -676,6 +698,7 @@ r.setAnimationLoop(ms => {
     const lx = (22 + ax * 34).toFixed(1), ly = (8 + ay * 22).toFixed(1);
     if (lx !== lightX || ly !== lightY) { lightX = lx; lightY = ly; glowEl.style.transform = `translate3d(${lx}vw,${ly}vh,0)`; rootStyle.setProperty('--lsx', (-ax * 4).toFixed(2)); }
   }
+  meltStep();
   r.render(scene, cam);
 });
 </script>
