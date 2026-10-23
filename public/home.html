@@ -361,12 +361,15 @@ const _mv = new THREE.Matrix4(), _er = new THREE.Matrix4(), _ee = new THREE.Eule
 const PAGEREFL = `
 uniform sampler2D uPage; uniform float uPageOn, uPk; uniform mat3 uEnvRot;
 vec3 pagePlane(vec3 d, vec3 C, vec2 hs, float I, float b){
-  vec3 N=normalize(-C); float dn=dot(d,N); if(dn>-1e-4) return vec3(0.);
-  vec3 hit=d*(dot(C,N)/dn)-C;
+  // no early returns: the texture lookup runs everywhere with continuous coordinates,
+  // and the plane fades out at its rim, so no seam lines appear at the plane edges
+  vec3 N=normalize(-C); float dn=dot(d,N);
+  float facing=smoothstep(-.02,-.08,dn);
+  vec3 hit=d*(dot(C,N)/min(dn,-.02))-C;
   vec3 U=normalize(cross(vec3(0.,1.,0.),N)), V=cross(N,U);
   vec2 uv=vec2(dot(hit,U)/(2.*hs.x)+.5, dot(hit,V)/(2.*hs.y)+.5);
-  if(uv.x<0.||uv.x>1.||uv.y<0.||uv.y>1.) return vec3(0.);
-  return texture2D(uPage,uv,b).rgb*I;}
+  vec2 rim=smoothstep(vec2(0.),vec2(.04),uv)*smoothstep(vec2(1.),vec2(.96),uv);
+  return texture2D(uPage,clamp(uv,0.,1.),b).rgb*I*facing*rim.x*rim.y;}
 vec3 pageRefl(vec3 viewDir, vec3 n, float rough){
   vec3 r=inverseTransformDirection(reflect(-viewDir,n),viewMatrix);
   r=uEnvRot*r; float b=rough*16.;
