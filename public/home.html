@@ -141,17 +141,16 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 </div>
 
 <script>
-// type runs once: the corners on load, the closing screen when it is reached; one letter every 60 ms, the statement's lines run side by side
+// type runs once: the corners on load, the legal corners when they are reached; one letter every 60 ms
 (() => {
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const $ = q => document.querySelector(q);
-  function split(root, start, perLine) {
+  function split(root, start) {
     if (!root) return;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
     while (walker.nextNode()) if (walker.currentNode.textContent.trim()) nodes.push(walker.currentNode);
     let i = 0;
-    nodes.forEach((n, li) => {
-      if (perLine) i = 0;
+    nodes.forEach(n => {
       const shown = document.createElement('span'), sr = document.createElement('span');
       shown.setAttribute('aria-hidden', 'true'); sr.className = 'sr'; sr.textContent = n.textContent;
       for (const part of n.textContent.split(/(\s+)/)) {
@@ -161,7 +160,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
         for (const c of part) {
           const ch = document.createElement('span'), g = document.createElement('span');
           ch.className = 'ch'; g.className = 'g'; g.textContent = c; ch.appendChild(g);
-          ch.style.setProperty('--dl', (start + (perLine ? li * 250 : 0) + i++ * 60) + 'ms');
+          ch.style.setProperty('--dl', (start + i++ * 60) + 'ms');
           wd.appendChild(ch);
         }
         shown.appendChild(wd);
@@ -172,9 +171,9 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
   split($('header b'), 300); split($('header .words'), 550); split($('.hero .foot .j'), 1000); split($('.hero .foot .cta span'), 1300);
   document.querySelector('header').classList.add('typed'); $('.hero .foot').classList.add('typed');
   const end = $('.end .pin');
-  split($('.closer p'), 0, true); split($('.closer .cta span'), 1500); split($('.legal > span:first-child'), 300); split($('.legal > span:last-child'), 500);
+  split($('.legal > span:first-child'), 0); split($('.legal > span:last-child'), 200);
   end.classList.add('tywait');
-  new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { end.classList.remove('tywait'); end.classList.add('typed'); io.disconnect(); } }, { threshold: 0.5 }).observe($('.closer p'));
+  new IntersectionObserver((es, io) => { if (es.some(e => e.isIntersecting)) { end.classList.remove('tywait'); end.classList.add('typed'); io.disconnect(); } }, { threshold: 0.5 }).observe($('.legal'));
 })();
 </script>
 <script type="module">
@@ -588,6 +587,34 @@ function frostFrame() {
   grainEl.style.opacity = e.toFixed(3);
   requestAnimationFrame(frostFrame);
 }
+// the closer reads itself in: each letter goes from dim to full as the last screen scrolls in, done at the very bottom
+const closerP = document.querySelector('.closer p');
+const chars = [];
+{
+  // line breaks stay as they are (the mobile-only ones too), only the words between them are split
+  const parts = closerP.innerHTML.split(/(<br[^>]*>)/i);
+  closerP.setAttribute('aria-label', parts.filter(p => !p.startsWith('<br')).map(p => p.trim()).join(' '));
+  closerP.innerHTML = parts.map(part => part.startsWith('<br') ? part : part.trim().split(/\s+/).filter(Boolean).map(word =>
+    `<span class="w" aria-hidden="true">${[...word].map(ch => `<span class="c">${ch}</span>`).join('')}</span>`).join(' ')).join(' ');
+  chars.push(...closerP.querySelectorAll('.c'));
+}
+function revealCloser() {
+  if (reduced) { for (const c of chars) c.style.opacity = 1; return; }
+  const h = innerHeight, max = document.documentElement.scrollHeight - h;
+  // starts when the statement's top enters the viewport, ends when the page can scroll no further;
+  // measured against the pinned screen, which itself moves while it sticks
+  const pinEl = closerP.closest('.pin'), endTop = pinEl.parentElement.getBoundingClientRect().top + scrollY;
+  const start = Math.min(max - 1, endTop + closerP.getBoundingClientRect().top - pinEl.getBoundingClientRect().top - h);
+  const p = Math.min(1, Math.max(0, (scrollY - start) / (max - start)));
+  const soft = 6, head = p * (chars.length + soft);
+  chars.forEach((c, i) => {
+    const t = Math.min(1, Math.max(0, (head - i) / soft));
+    c.style.opacity = (0.22 + 0.78 * t).toFixed(3);
+  });
+}
+addEventListener('scroll', revealCloser, { passive: true });
+addEventListener('resize', revealCloser);
+revealCloser();
 addEventListener('scroll', setFrost, { passive: true });
 addEventListener('resize', setFrost);
 window.__frostReady = true;
