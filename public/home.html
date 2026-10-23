@@ -14,7 +14,7 @@
 <style>
 @font-face{font-family:'Geist';font-weight:300;src:url(/fonts/Geist-Light.woff2) format('woff2');font-display:swap}
 @font-face{font-family:'Geist Pixel';src:url(/fonts/GeistPixel-Square.woff2) format('woff2');font-display:swap}
-html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.045),rgba(255,255,255,0) 55%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),var(--paper,#000);background-attachment:scroll,scroll,fixed,fixed,scroll}
+html{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at var(--lx,22%) var(--ly,8%),rgba(255,255,255,.045),rgba(255,255,255,0) 55%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.6),rgba(0,0,0,0) 70%),var(--paper,#000);background-attachment:scroll,scroll,fixed,fixed,scroll}
 /* one paper for the whole page: grain, light from the upper left, a darker lower right */
 html,body{margin:0;color:#a8a8a8;font:14px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 /* the stage spans exactly the visible area, so on iphone the cube centres between the toolbars */
@@ -45,7 +45,7 @@ main{max-width:640px;margin:0 auto;padding:0 28px 60px}
 .closer{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;padding:32px 32px 96px;gap:40px}
 .closer p{margin:0;max-width:880px;color:#fff;font-size:32px;line-height:1.25}
 /* light mode: pale studio paper, dark type, the same cut window pressed into a light board */
-html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at 22% 8%,rgba(255,255,255,.75),rgba(255,255,255,0) 60%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.12),rgba(0,0,0,0) 70%);background-attachment:scroll,fixed,fixed}
+html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23m)'/%3E%3C/svg%3E"),radial-gradient(120% 90% at var(--lx,22%) var(--ly,8%),rgba(255,255,255,.75),rgba(255,255,255,0) 60%),radial-gradient(90% 70% at 85% 105%,rgba(0,0,0,.12),rgba(0,0,0,0) 70%);background-attachment:scroll,fixed,fixed}
 .light body,.light header,.light .j,.light .pd,.light .go{color:#5a5a5a}
 .light header b,.light .pn,.light .closer p{color:#111}
 .light .wh,.light .legal,.light .legal a{color:#8a8a8a}
@@ -485,6 +485,8 @@ setFrost();
 requestAnimationFrame(frostFrame);
 
 let prev = 0, t = 0, proxS = 0, proxWas = 0;
+const finePointer = matchMedia('(pointer: fine)').matches, rootStyle = document.documentElement.style;
+let lightX = '', lightY = '';
 const endSection = document.querySelector('.end');
 const AXES = [new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 0, 1), new THREE.Vector3(0, 1, 0)];
 const _fwd = new THREE.Vector3(0, 0, 1), _qd = new THREE.Quaternion(), _qt = new THREE.Quaternion(), _qs = new THREE.Quaternion();
@@ -591,6 +593,11 @@ r.setAnimationLoop(ms => {
     holder.position.y += f * f * (3 - 2 * f) * (cam.aspect < 1 ? 0.18 : 0.42) * half;
   }
   scene.environmentRotation.y = cx * 0.9;
+  // one light for cube and paper: with a mouse the glow on the paper drifts with the reflections
+  if (finePointer) {
+    const lx = (22 + cx * 34).toFixed(1), ly = (8 + cy * 22).toFixed(1);
+    if (lx !== lightX || ly !== lightY) { lightX = lx; lightY = ly; rootStyle.setProperty('--lx', lx + '%'); rootStyle.setProperty('--ly', ly + '%'); }
+  }
   r.render(scene, cam);
 });
 </script>
