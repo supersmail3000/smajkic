@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [{ source: "/", destination: "/home.html" }];
   },
+  // one address for google: www answers with a permanent move to the bare domain the canonical names
+  async redirects() {
+    return [{ source: "/:path*", has: [{ type: "host", value: "www.smailsmajkic.com" }], destination: "https://smailsmajkic.com/:path*", permanent: true }];
+  },
   async headers() {
     return [
       { source: "/vendor/:path*", headers: immutable },
