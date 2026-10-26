@@ -66,7 +66,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 .light header b,.light .pn,.light .closer p{color:#111}
 .light .wh,.light .legal,.light .legal a{color:#8a8a8a}
 .light .go:hover,.light .legal a:hover,.light .hw:hover,.light .hw.on{color:#000}
-.light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 rgba(0,0,0,.28),inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.28),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
+.light .cta{background:linear-gradient(#cfcfcd,#d8d8d6);box-shadow:inset calc(var(--sx,var(--lsx,0)) * 1px) calc(2px + var(--sy,0) * 1px) 0 rgba(0,0,0,.28),inset calc(var(--sx,var(--lsx,0)) * 1px) calc(7px + var(--sy,0) * 1px) 9px -2px rgba(0,0,0,.28),inset calc(var(--sx,var(--lsx,0)) * -1px) calc(-1px - var(--sy,0) * .5px) 0 rgba(255,255,255,.9)}
 .light .cta span{color:#2b2b2b}.light .cta:hover span{color:#000}
 .light .grain{background-image:none}
 @media (max-width:720px){.closer p{font-size:24px}.closer p .mb{display:inline}.hero .foot{align-items:flex-end}.hero .foot .j>span{display:block}}
@@ -76,14 +76,15 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
-.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:9px 22px 11px;background:linear-gradient(#060606,#0a0a0a);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 #000,inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.95),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.12);transition:background .5s,box-shadow .25s}
+.cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:9px 22px 11px;background:linear-gradient(#060606,#0a0a0a);box-shadow:inset calc(var(--sx,var(--lsx,0)) * 1px) calc(2px + var(--sy,0) * 1px) 0 #000,inset calc(var(--sx,var(--lsx,0)) * 1px) calc(7px + var(--sy,0) * 1px) 9px -2px rgba(0,0,0,.95),inset calc(var(--sx,var(--lsx,0)) * -1px) calc(-1px - var(--sy,0) * .5px) 0 rgba(255,255,255,.12);transition:background .5s,box-shadow .25s}
 /* states read as the paper: hover lets a little light into the window, press pushes it deeper, focus gets a fine silver ring */
-.cta:hover{background:linear-gradient(#0b0b0b,#121212);box-shadow:inset calc(var(--lsx,0) * 1px) 3px 0 #000,inset calc(var(--lsx,0) * 1px) 10px 14px -2px #000,inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.14)}
-.light .cta:hover{background:linear-gradient(#cacac8,#d4d4d2);box-shadow:inset calc(var(--lsx,0) * 1px) 3px 0 rgba(0,0,0,.4),inset calc(var(--lsx,0) * 1px) 10px 14px -2px rgba(0,0,0,.42),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
+.cta:hover{background:linear-gradient(#0b0b0b,#121212);box-shadow:inset calc(var(--sx,var(--lsx,0)) * 1px) calc(3px + var(--sy,0) * 1px) 0 #000,inset calc(var(--sx,var(--lsx,0)) * 1px) calc(10px + var(--sy,0) * 1px) 14px -2px #000,inset calc(var(--sx,var(--lsx,0)) * -1px) calc(-1px - var(--sy,0) * .5px) 0 rgba(255,255,255,.14)}
+.light .cta:hover{background:linear-gradient(#cacac8,#d4d4d2);box-shadow:inset calc(var(--sx,var(--lsx,0)) * 1px) calc(3px + var(--sy,0) * 1px) 0 rgba(0,0,0,.4),inset calc(var(--sx,var(--lsx,0)) * 1px) calc(10px + var(--sy,0) * 1px) 14px -2px rgba(0,0,0,.42),inset calc(var(--sx,var(--lsx,0)) * -1px) calc(-1px - var(--sy,0) * .5px) 0 rgba(255,255,255,.9)}
 .cta:active{box-shadow:inset 0 3px 0 #000,inset 0 11px 12px -2px #000,inset 0 -1px 0 rgba(255,255,255,.05)}
 .cta:focus-visible{outline:1px solid rgba(220,220,220,.6);outline-offset:4px}
 /* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
-.cta>span{display:inline-block;color:#d4d4d4;transition:color .4s,transform .15s}
+/* the light comes from the pointer: the inner shadow falls away from it and the type leans a little toward it */
+.cta>span{display:inline-block;color:#d4d4d4;translate:calc(var(--tx,0) * 1px) calc(var(--ty,0) * 1px);transition:color .4s,transform .15s,translate .2s}
 .cta:hover span{color:#fff}
 .cta:active span{color:#a8a8a8}.cta:active>span{transform:translateY(1px)}
 .j{text-align:justify;text-align-last:left;font-size:14px;color:#a8a8a8}
@@ -557,6 +558,19 @@ drawPage().then(() => { envCache.clear(); applyEnv(); });
 // ---------- motion ----------
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let px = 0, py = 0, cx = 0, cy = 0, prox = 0, scrollV = 0, lastY = scrollY, freeze = 0;
+const ctas = [...document.querySelectorAll('.cta')];
+if (matchMedia('(pointer: fine)').matches) addEventListener('pointermove', e => {
+  for (const b of ctas) {
+    const r = b.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy) || 1;
+    // full effect near the button, gone ~420 px away
+    const s = Math.max(0, 1 - d / 420), nx = dx / d, ny = dy / d;
+    if (s === 0) { b.style.removeProperty('--sx'); b.style.removeProperty('--sy'); b.style.removeProperty('--tx'); b.style.removeProperty('--ty'); continue; }
+    const st = b.style;
+    st.setProperty('--sx', (-nx * 4 * s).toFixed(2)); st.setProperty('--sy', (-ny * 3 * s - 0.5 * s).toFixed(2));
+    st.setProperty('--tx', (Math.max(-1, Math.min(1, dx / (r.width / 2))) * 1.5 * s).toFixed(2));
+    st.setProperty('--ty', (Math.max(-1, Math.min(1, dy / (r.height / 2))) * 1 * s).toFixed(2));
+  }
+}, { passive: true });
 addEventListener('pointermove', e => {
   px = e.clientX / innerWidth - 0.5; py = e.clientY / innerHeight - 0.5; lastPointer = performance.now();
   const rc = cv.getBoundingClientRect();
