@@ -1,18 +1,46 @@
 # Smail Smajkic
 
-> Product design, design systems and brand. Find the problem, shape the product, build the brand. Works through SUPERSMAIL GmbH (https://supersmail.com).
+> Product creator. Smail Smajkic finds the problem, shapes the product and builds the brand that carries it. Fifteen years of product design, from founding teams to design systems that hold fifteen brands in one language.
 
-Contact: info@supersmail.com
+Today, anything can be built. Few things should be. The work is deciding which, and then making that one thing clear, usable and worth trusting.
+
+## What a product creator does
+
+Not a designer who receives a brief. The work covers the whole arc of a product, as one seat inside the team, next to engineering and leadership:
+
+- **Problem.** What is actually broken, for whom, and what is worth building. What to leave out.
+- **Product.** Flows, interfaces and prototypes, and the decisions behind every screen.
+- **System.** Design systems that let large teams ship one language at speed.
+- **Brand.** Identity, voice and the promise the product has to keep.
+
+## Range
+
+- **Zero to one.** Founding team at The Football Company. Product, brand and identity for Kickbase.
+- **One to many.** Design systems for Siemens Healthineers, Telefónica and Personio. Product design across BMW's digital platforms.
+- **Complex made safe.** Crypto for Börse Stuttgart (Bison), mobile banking (HVB), medical software (Siemens Healthineers).
+
+## When to bring him in
+
+- A new product needs its shape, before the first line of code.
+- A product has grown and lost its line.
+- Several brands or teams need one system.
+- A complex or regulated product has to feel simple and safe.
 
 ## Latest work
 
-- Bison: design system, product and brand for Börse Stuttgart's crypto app. Complex, made safe to use. https://bisonapp.com
-- Siemens Healthineers: SHUI design system. One UI standard for medical software.
+- [Bison](https://bisonapp.com): design system, product and brand for Börse Stuttgart's crypto app. Complex, made safe to use.
+- [Siemens Healthineers](https://www.siemens-healthineers.com): SHUI design system. One UI standard for medical software.
 - The Football Company: founding team. Product and brand from zero, then brand, content and communication.
-- BMW: car configurator and BMW ID. Product design across every digital platform.
-- Telefónica: senior designer, ONE design system. Fifteen brands, one language.
-- Personio: design system manager. Web components, guidelines and libraries.
-- HSE: UX lead for web, iOS and Android. Launched live shopping.
-- HVB (HypoVereinsbank): mobile banking app, redesigned for everyday clarity.
-- Vodafone: smart TV app. Interface, styleguide, icons and a modular system.
-- Kickbase: Bundesliga fantasy football. Product, brand, design system and identity.
+- [BMW](https://www.bmw.com): car configurator and BMW ID. Product design across every digital platform.
+- [Telefónica](https://www.telefonica.de): senior designer, ONE design system. Fifteen brands, one language.
+- [Personio](https://www.personio.com): design system manager. Web components, guidelines and libraries.
+- [HSE](https://www.hse.de): UX lead for web, iOS and Android. Launched live shopping.
+- [HVB (HypoVereinsbank)](https://www.hvb.de): mobile banking app, redesigned for everyday clarity.
+- [Vodafone](https://www.vodafone.de): smart TV app. Interface, styleguide, icons and a modular system.
+- [Kickbase](https://www.kickbase.com): Bundesliga fantasy football. Product, brand, design system and identity.
+
+## Contact
+
+- Email: info@supersmail.com
+- Site: https://smailsmajkic.com
+- Company: SUPERSMAIL GmbH, https://supersmail.com
