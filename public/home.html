@@ -30,7 +30,7 @@ html,body{overscroll-behavior:none}
 html,body{margin:0;color:#a8a8a8;font:14px/1.6 'Geist Pixel',ui-monospace,monospace;text-transform:lowercase}
 /* the stage spans exactly the visible area, so on iphone the cube centres between the toolbars */
 #stage{display:block;position:fixed;inset:0;width:100%;height:100%;z-index:0;background:transparent}
-header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:2}
+header{position:fixed;top:32px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:baseline;color:#a8a8a8;z-index:4}
 header b{font-weight:400;color:#fff;font-size:14px;cursor:pointer;transition:color .8s}
 html{transition:background-color .8s}
 body,header,.j,.pd,.go,.pn,.wh,.legal,.legal a,.closer p,.cta span{transition:color .8s}
@@ -72,12 +72,14 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 @media (max-width:720px){.closer p{font-size:24px}.closer p .mb{display:inline}.hero .foot{align-items:flex-end}.hero .foot .j>span{display:block}}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;text-decoration:none;margin-left:24px}.legal a:hover{color:#fff}
+.legal a.co{margin-left:0;color:inherit}
 @media (max-width:720px){.work li{grid-template-columns:minmax(0,1fr);gap:8px}.go{text-align:left}}
 .foot{padding-bottom:max(32px,env(safe-area-inset-bottom)) !important;display:flex;justify-content:space-between;align-items:baseline;gap:24px;padding:0 32px 32px}
 .foot .j{max-width:440px;margin:0;text-align:left}
 .cta{flex:none;display:inline-block;text-decoration:none;border-radius:999px;padding:9px 22px 11px;background:linear-gradient(#060606,#0a0a0a);box-shadow:inset calc(var(--lsx,0) * 1px) 2px 0 #000,inset calc(var(--lsx,0) * 1px) 7px 9px -2px rgba(0,0,0,.95),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.12);transition:background .5s,box-shadow .25s}
 /* states read as the paper: hover lets a little light into the window, press pushes it deeper, focus gets a fine silver ring */
-.cta:hover{background:linear-gradient(#0b0b0b,#121212)}
+.cta:hover{background:linear-gradient(#0b0b0b,#121212);box-shadow:inset calc(var(--lsx,0) * 1px) 3px 0 #000,inset calc(var(--lsx,0) * 1px) 10px 14px -2px #000,inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.14)}
+.light .cta:hover{background:linear-gradient(#cacac8,#d4d4d2);box-shadow:inset calc(var(--lsx,0) * 1px) 3px 0 rgba(0,0,0,.4),inset calc(var(--lsx,0) * 1px) 10px 14px -2px rgba(0,0,0,.42),inset calc(var(--lsx,0) * -1px) -1px 0 rgba(255,255,255,.9)}
 .cta:active{box-shadow:inset 0 3px 0 #000,inset 0 11px 12px -2px #000,inset 0 -1px 0 rgba(255,255,255,.05)}
 .cta:focus-visible{outline:1px solid rgba(220,220,220,.6);outline-offset:4px}
 /* a window cut into the page: the top wall's shadow falls in, the lower wall barely catches light */
@@ -138,7 +140,7 @@ html.light{background-color:#e4e4e2;background-image:url("data:image/svg+xml,%3C
 </section>
 <div class="end"><div class="pin">
 <section class="closer"><div class="cube-slot" aria-hidden="true"></div><p>TODAY,<br>ANYTHING CAN BE BUILT.<br>FEW THINGS SHOULD BE.<br>THIS IS HOW IT'S DONE.</p><a class="cta" href="mailto:info@supersmail.com?subject=Working%20together&body=Hi%20Smail%2C%0A%0Awe%20are%20building%20%5Bproduct%5D%20and%20need%20someone%20to%20find%20the%20problem%2C%20shape%20the%20product%20and%20build%20the%20brand.%0A%0ATeam%3A%0ARole%3A%0AStart%3A%0A%0AUp%20for%20a%20call%3F%0A%0A"><span>WORK WITH ME.</span></a></section>
-<footer class="legal"><span>© SUPERSMAIL GMBH</span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
+<footer class="legal"><span><a class="co" href="https://supersmail.com" target="_blank" rel="noopener">© SUPERSMAIL GMBH</a></span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
 </div></div>
 </div>
 
@@ -563,12 +565,16 @@ addEventListener('pointermove', e => {
 });
 addEventListener('scroll', () => { scrollV += Math.abs(scrollY - lastY); lastY = scrollY; }, { passive: true });
 const fading = [document.querySelector('.hero .foot'), document.querySelector('header')].filter(Boolean);
+const endBox = document.querySelector('.end');
 function fadeFoot() {
   const p = Math.min(1, Math.max(0, scrollY / (innerHeight * 0.35)));
+  // the header comes back the same way it left, once the closing screen has arrived
+  const back = Math.min(1, Math.max(0, 1 - endBox.getBoundingClientRect().top / (innerHeight * 0.35)));
   for (const el of fading) {
-    el.style.filter = p > 0 ? `blur(${(p * 14).toFixed(1)}px)` : '';
-    el.style.opacity = (1 - p).toFixed(3);
-    el.style.pointerEvents = p > 0.9 ? 'none' : '';
+    const q = el.tagName === 'HEADER' ? Math.min(p, 1 - back) : p;
+    el.style.filter = q > 0 ? `blur(${(q * 14).toFixed(1)}px)` : '';
+    el.style.opacity = (1 - q).toFixed(3);
+    el.style.pointerEvents = q > 0.9 ? 'none' : '';
   }
 }
 addEventListener('scroll', fadeFoot, { passive: true });
