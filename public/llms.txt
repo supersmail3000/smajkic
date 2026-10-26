@@ -1,0 +1,18 @@
+# Smail Smajkic
+
+> Product design, design systems and brand. Find the problem, shape the product, build the brand. Works through SUPERSMAIL GmbH (https://supersmail.com).
+
+Contact: info@supersmail.com
+
+## Latest work
+
+- Bison: design system, product and brand for Börse Stuttgart's crypto app. Complex, made safe to use. https://bisonapp.com
+- Siemens Healthineers: SHUI design system. One UI standard for medical software.
+- The Football Company: founding team. Product and brand from zero, then brand, content and communication.
+- BMW: car configurator and BMW ID. Product design across every digital platform.
+- Telefónica: senior designer, ONE design system. Fifteen brands, one language.
+- Personio: design system manager. Web components, guidelines and libraries.
+- HSE: UX lead for web, iOS and Android. Launched live shopping.
+- HVB (HypoVereinsbank): mobile banking app, redesigned for everyday clarity.
+- Vodafone: smart TV app. Interface, styleguide, icons and a modular system.
+- Kickbase: Bundesliga fantasy football. Product, brand, design system and identity.
