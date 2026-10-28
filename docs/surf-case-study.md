@@ -1,5 +1,5 @@
 # SURF — case study (text of /work/surf, generated from public/work/surf.html)
-# SURF
+# SURF A browser for macOS, with an AI agent as its second user
 
 Our browser had eight weeks to live, so four of us took two days to build a working one.
 
@@ -19,17 +19,19 @@ A great wave hit Arc, and people didn't know how to survive without a good brows
 
 Arc was where my work lived: 659 tabs, 21 pinned folders. On October 22, 2026, The Browser Company announced that Arc stops working on December 22.
 
-So the idea was not to find a new browser, but to build the one we wanted: Arc's best decisions, on an engine someone else keeps secure, plus one thing Arc never had. An agent that uses the same browser as you, as a second user.
+The news came up in a meeting, and it hit all four of us. We had all lived in Arc for years. We had all tried to move to Dia, The Browser Company's new browser, and none of us had made the switch stick. The other browsers we tried didn't convince us either. We are, it turns out, future boomers: every change hurts, and we would rather build a browser than get used to a new one.
 
-- **Oct 22** Arc announces its end. The idea for SURF.
+So we didn't look for a new browser. We built the one we wanted: Arc's best decisions, on an engine someone else keeps secure, plus one thing Arc never had. An agent that uses the same browser as you, as a second user.
 
-- **Oct 23** Ante, Josip, Dominik and I on a call. What a browser for the four of us needs, written down as requirements. Ante writes the first version that night: one window, no URL bar, the sidebar at the edge.
+- **Oct 22** Arc announces its end. We talk it through in a meeting, and the idea for SURF comes out of it.
 
-- **Oct 24** I import my own Arc. SURF freezes. From then on, nothing may hang. That night Ante shares the first download.
+- **Oct 23** A call. Requirements on one page. Ante writes the first version that night: one window, no URL bar, the sidebar at the edge.
+
+- **Oct 24** Ante shares the first DMG. I install it, import my own Arc, and SURF freezes. That evening I get the invite to GitHub, and my first fix is in before midnight. From then on, nothing may hang.
 
 - **Oct 25** Dominik and Ante move the engine from WebKit to Chromium, so the agent can drive it.
 
-- **Oct 28** SURF 0.2.0. The four of us use it every day.
+- **Oct 28** SURF 0.2.0.
 
 [peek.jpg]
 _Peek, from the first night_
@@ -38,11 +40,11 @@ _Split, by Josip_
 
 ## THE TEAM
 
-Four people, working async and side by side. Nobody waits for a meeting and nobody signs off on anyone else's work. Everyone builds, everyone ships.
+Four people, working async and side by side. Nobody waits for the next meeting and nobody signs off on anyone else's work. Everyone builds, everyone ships.
 
 What holds it together is writing. Every decision goes into the shared component docs with a name, a date and the reason, so whoever picks it up next knows why without asking. Every change is tried in the running app before it counts, not argued in text.
 
-Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it. I brought the product idea and took the parts you touch a hundred times a day from concept to code: how the sidebar looks, moves and scales.
+Ante set the bar ("perfection, no compromises") and wrote the first version. Josip built Pins, Split and Capture. Dominik kept it safe and, with Ante, moved it to Chromium. I brought the product idea and took the sidebar, the part you touch a hundred times a day, from concept to code.
 
 ## DECISIONS
 
@@ -52,7 +54,9 @@ My own Arc import froze SURF. The first five minutes decide whether someone swit
 
 ### 2. One grid, quiet motion
 
-Icons 14, buttons 24, rows 32. Type in five steps, spacing on 4 pt, text centred by its capitals and checked by measuring pixels, not by eye. Motion stays out of the way: the hover slides from row to row instead of jumping, a folder's flap swings as the group opens, a Cmd-clicked tab grows into its place right below the one it came from. And no extra steps: an empty window keeps the Wave open, because a second click to get the field back is one too many.
+Every size comes from one grid: icons 14, buttons 24, rows 32, spacing on 4 pt. Text is centred by its capitals and checked in pixels, not by eye.
+
+Motion stays out of the way. The hover slides from row to row, a folder's flap swings as the group opens, a new tab grows into its place. And no extra steps: an empty window keeps the Wave open.
 
 [tiles.jpg]
 [groups.jpg]
@@ -64,7 +68,7 @@ _The folder swings_
 
 ### 3. The row becomes the tile
 
-The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. Before any production code, I built three clickable prototypes: A, the icons glide. B, each row shrinks into its own tile. C, two beats. I picked B: every folder row becomes its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.
+The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. Three clickable prototypes before any production code: icons glide, rows become tiles, or two beats. B won: every folder row becomes its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.
 
 [prototypes.html]
 _The three prototypes, live. Press close, or drag the progress bar._
@@ -87,13 +91,15 @@ _Hidden. No URL bar, ever._
 
 ### 4. Explore: taste, kept
 
-Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. The agent reads it first, so a new conversation doesn't meet my taste as a stranger.
+My taste lived in four apps and a hundred lost conversations. Now Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. The agent reads it first, so a new conversation doesn't meet my taste as a stranger.
 
 [explore.jpg]
 
 ## A NEW WAY OF WORKING
 
-No handoff. Idea, prototype and production code come from the same person, with AI agents as the dev team. The designer doesn't hand over a file, the designer ships.
+The designer doesn't hand over a file. The designer ships.
+
+No handoff. Idea, prototype and production code come from the same person, with AI agents as the dev team.
 
 When something is unclear, I make it clickable first and decide in the browser, not in a meeting. Then it gets built, checked frame by frame in the running app, and shipped, often the same day. Four people work like that in parallel, and the written decisions keep it one product.
 
@@ -101,8 +107,8 @@ Small and fast beats complete: a feature the four of us use every day beats five
 
 ## OUTCOME
 
-SURF 0.2.0 shipped on day six. It holds a thousand tabs without a stutter, previews links in Peek, splits up to four tabs side by side, keeps what inspires you in Explore, and lets an agent work in the same browser as you.
+SURF 0.2.0 shipped on day six. It holds a thousand tabs, previews links in Peek, splits four tabs side by side, keeps what inspires you in Explore, and gives an agent its own seat. The four of us use it every day.
 
-The four of us use it every day. Arc has eight weeks left.
+Arc stops on December 22. SURF doesn't.
 
 Unused assets kept in public/work/surf: wave.mp4, wave.jpg, pins.jpg, capture.jpg
