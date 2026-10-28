@@ -29,7 +29,7 @@ Not a designer who receives a brief. The work covers the whole arc of a product,
 ## Latest work
 
 - [Bison](https://bisonapp.com): design system, product and brand for Börse Stuttgart's crypto app. Complex, made safe to use.
-  - Bison Select, the premium tier: [German Design Award 2027, Winner](https://www.german-design-award.com/galerie/detail/service-design/bison-select-crypto-trading-elevated-2027) (Excellent Communications Design, Service Design).
+  - Bison Select: [German Design Award 2027, Winner](https://www.german-design-award.com/galerie/detail/service-design/bison-select-crypto-trading-elevated-2027) (Excellent Communications Design, Service Design).
 - [Siemens Healthineers](https://www.siemens-healthineers.com): SHUI design system. One UI standard for medical software.
 - The Football Company: founding team. Product and brand from zero, then brand, content and communication.
 - [BMW](https://www.bmw.com): car configurator and BMW ID. Product design across every digital platform.
