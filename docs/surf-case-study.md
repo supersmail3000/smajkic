@@ -9,7 +9,7 @@ Assets: public/work/surf/ (stills + clips, see the list at the end).
 A browser for four people. Built in six days.
 
 **Team** Ante, Josip, Dominik, Smail
-**My seat** interaction and visual system, sidebar motion, performance at power-user scale
+**Role** concept, design and development
 **Platform** macOS, Swift on Chromium
 **Time** October 2026, ongoing
 
@@ -23,7 +23,7 @@ The rule from day one: Arc's best decisions, on an engine someone else keeps sec
 [sidebar-docked.png — the docked sidebar: Tiles, Pins, Groups]
 
 ## My part
-Four people, no sign-off. Everyone builds, everyone ships. I took the parts you touch a hundred times a day: how the sidebar looks, moves and scales. 33 of the first 89 merged pull requests.
+Four people, no sign-off. Everyone builds, everyone ships. I took the parts you touch a hundred times a day and took them from concept to code: how the sidebar looks, moves and scales. 33 of the first 89 merged pull requests.
 
 Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it.
 
