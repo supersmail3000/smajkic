@@ -30,6 +30,9 @@ main{padding:160px 32px 128px}
 .wide{max-width:1120px;margin:64px auto}
 h1,h2,h3{font-weight:400;color:#fff;margin:0}
 h1{font-size:24px;line-height:1.35}
+/* what surf is, quiet next to the name, so the headline can stay a story */
+h1 .what{font-size:14px;color:#7d7d7d;margin-left:16px;vertical-align:middle}
+@media (max-width:720px){h1 .what{display:block;margin:4px 0 0}}
 h2{font-size:14px;color:#7d7d7d;margin:128px 0 24px}
 h3{font-size:14px;margin:48px 0 8px}
 p{margin:0 0 16px}
@@ -64,7 +67,7 @@ figure img.bare{background:none;border-radius:0}
 <header><a href="/"><b>SMAIL SMAJKIC</b></a><a href="/">← ALL WORK</a></header>
 <main>
 <section class="col">
-<h1>SURF</h1>
+<h1>SURF <span class="what">A browser for macOS, with an AI agent as its second user</span></h1>
 <p class="lede">Our browser had eight weeks to live, so four of us took two days to build a working one.</p>
 <dl class="facts">
 <div><dt>Role</dt><dd>Product idea, concept, design and development</dd></div>
