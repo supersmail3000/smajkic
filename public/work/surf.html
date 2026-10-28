@@ -34,8 +34,10 @@ h2{font-size:14px;color:#7d7d7d;margin:128px 0 24px}
 h3{font-size:14px;margin:48px 0 8px}
 p{margin:0 0 16px}
 .lede{color:#fff;font-size:24px;line-height:1.35;margin-top:8px}
-.facts{display:grid;grid-template-columns:120px 1fr;gap:8px 32px;margin-top:64px}
-.facts dt{color:#7d7d7d}.facts dd{margin:0}
+/* four facts in one row, label over value, like the homepage work list */
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:32px;margin:96px 0 0}
+.facts div{display:grid;gap:4px;align-content:start}
+.facts dt{color:#7d7d7d}.facts dd{margin:0;color:#fff}
 figure{margin:0}
 figure img,figure video{display:block;width:100%;height:auto;border-radius:12px;background:#0a0a0a}
 figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
@@ -43,11 +45,12 @@ figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
 /* the morph as single frames, read left to right */
 .frames{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}
 .frames img{border-radius:6px}
+figure img.bare{background:none;border-radius:0}
 .narrow{max-width:360px}
 .narrow2{max-width:760px;align-items:start}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;margin-left:24px}.legal a:hover{color:#fff}.legal a.co{margin-left:0;color:inherit}
-@media (max-width:720px){header{left:16px;right:16px;top:16px}main{padding:112px 16px 96px}.legal{padding:0 16px 24px}.pair{grid-template-columns:1fr}.frames{grid-template-columns:repeat(3,1fr)}.facts{grid-template-columns:1fr;gap:0}.facts dd{margin-bottom:12px}h2{margin-top:96px}.wide{margin:48px auto}}
+@media (max-width:720px){header{left:16px;right:16px;top:16px}main{padding:112px 16px 96px}.legal{padding:0 16px 24px}.pair{grid-template-columns:1fr}.frames{grid-template-columns:repeat(3,1fr)}.facts{grid-template-columns:1fr 1fr;gap:24px 16px;margin-top:64px}h2{margin-top:96px}.wide{margin:48px auto}}
 </style>
 </head>
 <body>
@@ -58,10 +61,10 @@ figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
 <h1>SURF</h1>
 <p class="lede">A browser for four people. Built in six days.</p>
 <dl class="facts">
-<dt>Team</dt><dd>Ante, Josip, Dominik, Smail</dd>
-<dt>My seat</dt><dd>Interaction and visual system, sidebar motion, performance at power-user scale</dd>
-<dt>Platform</dt><dd>macOS, Swift on Chromium</dd>
-<dt>Time</dt><dd>October 2026, ongoing</dd>
+<div><dt>Role</dt><dd>Interaction, motion, visual system</dd></div>
+<div><dt>Team</dt><dd>Ante, Josip, Dominik and me</dd></div>
+<div><dt>Shipped</dt><dd>0.2.0 on day six, 33 of 89 PRs mine</dd></div>
+<div><dt>Platform</dt><dd>macOS, Swift on Chromium</dd></div>
 </dl>
 </section>
 <figure class="wide"><img src="/work/surf/sidebar-docked.jpg" alt="surf with the docked sidebar: tiles, pins and groups"></figure>
@@ -88,7 +91,7 @@ figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
 <h3>4. The row becomes the tile</h3>
 <p>The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. I asked for three clickable prototypes before writing any code: icons glide, two beats, or each row shrinking into its own tile. I picked the third. Each folder row shrinks into its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.</p>
 </section>
-<figure class="wide"><img src="/work/surf/prototypes.jpg" alt="three clickable prototypes of the sidebar turning into the rail"><figcaption>The three prototypes, halfway through: icons glide, the row becomes the tile, two beats. B won.</figcaption></figure>
+<figure class="wide"><img class="bare" src="/work/surf/prototypes.png" alt="three clickable prototypes of the sidebar turning into the rail"><figcaption>The three prototypes, halfway through: icons glide, the row becomes the tile, two beats. B won.</figcaption></figure>
 <figure class="wide"><video src="/work/surf/morph.mp4" autoplay muted loop playsinline preload="metadata"></video>
 <figcaption>In the app, at full speed, then four times slower.</figcaption>
 <div class="frames"><img src="/work/surf/morph-01.jpg" alt=""><img src="/work/surf/morph-02.jpg" alt=""><img src="/work/surf/morph-03.jpg" alt=""><img src="/work/surf/morph-04.jpg" alt=""><img src="/work/surf/morph-05.jpg" alt=""><img src="/work/surf/morph-06.jpg" alt=""></div></figure>
