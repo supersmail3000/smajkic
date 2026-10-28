@@ -6,7 +6,11 @@ const immutable = [{ key: "Cache-Control", value: "public, max-age=31536000, imm
 const nextConfig: NextConfig = {
   // the homepage is a static page with its own webgl scene; imprint and privacy stay next routes
   async rewrites() {
-    return [{ source: "/", destination: "/home.html" }];
+    return [
+      { source: "/", destination: "/home.html" },
+      { source: "/surf", destination: "/work/surf.html" },
+      { source: "/work/surf", destination: "/work/surf.html" },
+    ];
   },
   // one address for google: www answers with a permanent move to the bare domain the canonical names
   async redirects() {
