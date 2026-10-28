@@ -23,9 +23,9 @@ So the idea was not to find a new browser, but to build the one we wanted: Arc's
 
 - **Oct 22** Arc announces its end. The idea for SURF.
 
-- **Oct 23** Ante, Josip, Dominik and I on a call. What a browser for the four of us needs, written down as requirements. Ante writes the first version that night and : one window, no URL bar, the sidebar at the edge.
+- **Oct 23** Ante, Josip, Dominik and I on a call. What a browser for the four of us needs, written down as requirements. Ante writes the first version that night: one window, no URL bar, the sidebar at the edge.
 
-- **Oct 24** I import my own Arc. SURF freezes. From then on, nothing may hang.
+- **Oct 24** I import my own Arc. SURF freezes. From then on, nothing may hang. That night Ante shares the first download.
 
 - **Oct 25** Dominik and Ante move the engine from WebKit to Chromium, so the agent can drive it.
 
