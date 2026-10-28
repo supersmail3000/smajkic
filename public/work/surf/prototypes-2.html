@@ -49,7 +49,7 @@ label.check { display: flex; align-items: center; gap: 6px; color: var(--muted);
 .scrub output { font-family: var(--mono); font-variant-numeric: tabular-nums; width: 4ch; text-align: right; color: var(--name); }
 kbd { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--hair); border-radius: 4px; padding: 1px 5px; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); justify-content: center; gap: 20px; }
 figure { margin: 0; display: grid; gap: 10px; justify-items: center; }
 figcaption { width: 300px; max-width: 100%; display: grid; gap: 3px; }
 figcaption b { font-weight: 600; font-size: 14px; }
@@ -84,11 +84,7 @@ figcaption span { color: var(--muted); font-size: 13px; line-height: 1.45; }
 </style>
 
 <div class="wrap">
-  <header>
-    <span class="tag">SURF · Sidebar → Rail · Cmd+S</span>
-    <h1>Drei Wege, wie die Sidebar zur Rail wird</h1>
-    <p>Alle drei laufen auf derselben Uhr. „Schließen“ spielt angedockt → Rail, „Öffnen“ zurück. Mit dem Regler gehst du Bild für Bild durch. Die Rail sieht in allen dreien aus wie heute.</p>
-  </header>
+  
 
   <div class="controls" role="group" aria-label="Play">
     <button id="play" type="button">Close</button>
@@ -110,7 +106,12 @@ figcaption span { color: var(--muted); font-size: 13px; line-height: 1.45; }
 <script>
 // Geometry in points, as in SURF: rows 32 high stepping 36, rail 48 wide with 32 pt tiles.
 const W = 220, RAIL = 48, ROW0 = 128, STEP = 36, TILE0 = 166;
-const GROUPS = [["Reading", "📚", 7], ["Research", null, 4], ["Type", null, 3], ["Design", null, 8], ["Travel", null, 12], ["Music", null, 5], ["Sites", null, 3], ["Inspo", null, 7], ["Tools", null, 3]];
+const GROUPS = [["Reading", "📚", 7], ["Research", null, 4], ["Agencies", null, 3],
+  ["Discover - Cosmos", "tab:co", ""], ["iPhone Duo - Apple", "tab:ap", "", true], ["Figma Community", "tab:fi", ""], ["The Linear Method", "tab:ln", ""]];
+const FAVICON = { co: '<div class="fav" style="background:#fff;color:#000;font:700 10px var(--sans);display:grid;place-items:center">✻</div>',
+  ap: '<div class="fav" style="background:#e4e4e7"></div>',
+  fi: '<div class="fav" style="background:linear-gradient(135deg,#f24e1e,#a259ff 50%,#1abcfe)"></div>',
+  ln: '<div class="fav" style="background:#5e6ad2"></div>' };
 const FOLDER = '<svg width="15" height="13" viewBox="0 0 15 13" fill="none" stroke="#a1a1aa" stroke-width="1.2"><path d="M1.5 2.5a1 1 0 0 1 1-1h3l1.5 1.5h5.5a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1h-10a1 1 0 0 1-1-1z"/></svg>';
 const TOGGLE = '<svg width="16" height="14" viewBox="0 0 16 14" fill="none" stroke="#d4d4d8" stroke-width="1.2"><rect x="1" y="1" width="14" height="12" rx="2.5"/><path d="M6 1v12"/></svg>';
 
@@ -122,9 +123,9 @@ const sprung = (p) => p >= 1 ? 1 : 1 - (1 + (2 * Math.PI / .4) * p * .45) * Math
 const ease = (p) => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
 
 const VARIANTS = [
-  { id: "A", name: "Icons glide", text: "The sidebar narrows and cuts the labels off. Each icon glides from its row to its place in the rail, where its tile joins it." },
-  { id: "B", name: "The row becomes the tile", text: "The row itself is the element: its surface shrinks from row width to the 32 pt tile and travels with its icon. Picked and shipped." },
-  { id: "C", name: "Narrow, then sort", text: "Two beats: the sidebar narrows, the icons stay at their height. Then they slide into the rail one after another." },
+  { id: "A", tabs: false, tag: "VARIANT A", name: "Icons glide", text: "The sidebar narrows and cuts the labels off. Each icon glides from its row to its place in the rail, where its tile joins it." },
+  { id: "B", tabs: true, tag: "VARIANT B · SHIPPED", name: "The row becomes the tile", text: "The row itself is the element: its surface shrinks to the 32 pt tile and travels with its icon. Tab rows shrink onto their icon too, the open tab keeps its fill." },
+  { id: "C", tabs: false, tag: "VARIANT C", name: "Narrow, then sort", text: "Two beats: the sidebar narrows, the icons stay at their height. Then they slide into the rail one after another." },
 ];
 
 function el(parent, cls, html) {
@@ -138,19 +139,19 @@ function el(parent, cls, html) {
 function build(variant) {
   const fig = document.createElement("figure");
   const win = el(fig, "win");
-  win.setAttribute("aria-label", "Variant " + variant.id + ": " + variant.name);
+  win.setAttribute("aria-label", variant.name);
   const cap = document.createElement("figcaption");
-  cap.innerHTML = '<span class="tag">VARIANT ' + variant.id + '</span><b>' + variant.name + '</b><span>' + variant.text + '</span>';
+  cap.innerHTML = '<span class="tag">' + variant.tag + '</span><b>' + variant.name + '</b><span>' + variant.text + '</span>';
   fig.appendChild(cap);
 
   const page = el(win, "pageview");
   const site = el(page, "site");
-  el(site, "t", "Dieter Rams");
+  el(site, "t", "iPhone Duo");
   [92, 70, 84, 40, 76, 60].forEach((w) => { el(site, "l").style.width = w + "%"; });
 
   const panel = el(win, "panel");
   const dots = [14, 32, 50].map((x) => { const d = el(panel, "abs dot"); d.style.left = x + "px"; d.style.top = "17px"; return d; });
-  const pill = el(panel, "abs pill", "wikipedia.org"); pill.style.top = "44px"; pill.style.width = (W - 16) + "px"; pill.style.boxSizing = "border-box";
+  const pill = el(panel, "abs pill", "apple.com"); pill.style.top = "44px"; pill.style.width = (W - 16) + "px"; pill.style.boxSizing = "border-box";
   const ftiles = [8, 58].map((x) => { const t = el(panel, "abs ftile"); t.style.left = x + "px"; t.style.top = "80px"; return t; });
   const rows = GROUPS.map((g, i) => {
     const y = ROW0 + i * STEP;
@@ -180,9 +181,11 @@ function build(variant) {
   GROUPS.forEach((g, i) => {
     const shape = el(win, "abs shape");
     const tile = el(win, "abs tile");
-    const from = el(win, "abs glyph", g[1] ? g[1] : FOLDER);
-    const to = el(win, "abs glyph", g[1] ? g[1] : '<span class="letter">' + g[0][0].toUpperCase() + '</span>');
-    items.push({ kind: "group", i, src: [22, ROW0 + i * STEP + 16], dst: [24, TILE0 + i * STEP + 16], from, to, tile, shape, row: rows[i], emoji: !!g[1] });
+    const isTab = !!(g[1] && g[1].startsWith("tab:"));
+    const icon = isTab ? FAVICON[g[1].slice(4)] : g[1];
+    const from = el(win, "abs glyph", icon ? icon : FOLDER);
+    const to = el(win, "abs glyph", icon ? icon : '<span class="letter">' + g[0][0].toUpperCase() + '</span>');
+    items.push({ kind: "group", i, isTab, selected: !!g[3], src: [22, ROW0 + i * STEP + 16], dst: [24, TILE0 + i * STEP + 16], from, to, tile, shape, row: rows[i], emoji: !!icon });
   });
 
   return { fig, variant, page, panel, dots, pill, ftiles, rows, railFav, hair, items, merge };
@@ -213,7 +216,7 @@ function render(s, p) {
   const late = seg(p, .7, 1);
   s.railFav.style.opacity = late;
   s.hair.style.opacity = late;
-  const labelFade = v === "B" ? 1 - seg(p, 0, .35) : 1;
+  const labelFade = v === "B" ? 1 - seg(p, 0, .35) : 1 - seg(p, .1, .5);
   s.rows.forEach((r) => { r.label.style.opacity = labelFade; r.count.style.opacity = labelFade * (1 - seg(p, 0, .3)); });
 
   for (const it of s.items) {
@@ -247,6 +250,30 @@ function render(s, p) {
     it.from.style.opacity = it.emoji ? 1 : 1 - swap;
     it.to.style.opacity = it.emoji ? 0 : swap;
 
+    if (it.isTab) {
+      // A tab: no tile in the rail. With surfaces its row shows faintly on the way and shrinks onto the icon's square; the open tab keeps its fill.
+      const t = ease(p);
+      const w = Math.min(lerp(W - 16, 32, t), Math.max(32, pw - 16));
+      const top = lerp(it.src[1] - 16, it.dst[1] - 16, t);
+      const ix = 8 + lerp(14, 16, t);
+      place(it.from, ix, top + 16); place(it.to, ix, top + 16);
+      it.tile.style.opacity = 0;
+      const selFill = .08;
+      let a;
+      if (s.variant.tabs) {
+        a = it.selected ? selFill : (p < .4 ? lerp(0, .045, p / .4) : lerp(.045, 0, (p - .4) / .6));
+        Object.assign(it.shape.style, { left: "8px", top: top + "px", width: w + "px", height: "32px", opacity: 1, boxShadow: "none",
+          borderRadius: "8px", background: "rgba(255,255,255," + a.toFixed(3) + ")" });
+      } else {
+        // Without: the row's fill goes with its text; the open tab's square comes in with the rail.
+        a = it.selected ? (p < .35 ? selFill * (1 - p / .35) : selFill * seg(p, .7, 1)) : 0;
+        Object.assign(it.shape.style, { left: (p < .35 ? 8 : it.dst[0] - 16) + "px", top: (p < .35 ? it.src[1] - 16 : it.dst[1] - 16) + "px",
+          width: (p < .35 ? Math.max(32, pw - 16) : 32) + "px", height: "32px", opacity: 1, boxShadow: "none", borderRadius: "8px",
+          background: "rgba(255,255,255," + a.toFixed(3) + ")" });
+        place(it.from, x, y); place(it.to, x, y);
+      }
+      continue;
+    }
     if (v === "B") {
       // The row's own surface: row-wide and faint at the start, the 32 pt tile at the end.
       const t = ease(p);
@@ -307,7 +334,7 @@ function play() {
 playBtn.addEventListener("click", play);
 scrub.addEventListener("input", () => { cancelAnimationFrame(raf); draw(scrub.value / 1000); });
 document.addEventListener("keydown", (e) => { if (e.key === " " && e.target === document.body) { e.preventDefault(); play(); } });
-document.querySelector("header").style.display="none";draw(Number(new URLSearchParams(location.search).get("p")||0));if(location.search.includes("clean")){document.querySelector("header").style.display="none";document.querySelector(".controls").style.display="none";}
+draw(0);
 </script>
 
 </body></html>
