@@ -46,6 +46,7 @@ figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
 .frames{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:16px}
 .frames img{border-radius:6px}
 figure img.bare{background:none;border-radius:0}
+.proto{display:block;width:100%;height:720px;border:0;background:transparent;color-scheme:dark}
 .narrow{max-width:360px}
 /* the story as dated beats */
 .tl{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:16px}
@@ -103,7 +104,7 @@ figure img.bare{background:none;border-radius:0}
 <h3>4. The row becomes the tile</h3>
 <p>The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. Before any production code, I built three clickable prototypes: A, the icons glide. B, each row shrinks into its own tile. C, two beats. I picked B: every folder row becomes its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.</p>
 </section>
-<figure class="wide"><img class="bare" src="/work/surf/prototypes.png" alt="three clickable prototypes of the sidebar turning into the rail"><figcaption>The three prototypes, halfway through: icons glide, the row becomes the tile, two beats. B won.</figcaption></figure>
+<figure class="wide"><iframe class="proto" src="/work/surf/prototypes.html" title="three clickable prototypes of the sidebar turning into the rail" loading="lazy"></iframe><figcaption>The three prototypes, live. Press close, or drag the progress bar.</figcaption></figure>
 <figure class="wide"><video src="/work/surf/morph.mp4" autoplay muted loop playsinline preload="metadata"></video>
 <figcaption>In the app, at full speed, then four times slower.</figcaption>
 <div class="frames"><img src="/work/surf/morph-01.jpg" alt=""><img src="/work/surf/morph-02.jpg" alt=""><img src="/work/surf/morph-03.jpg" alt=""><img src="/work/surf/morph-04.jpg" alt=""><img src="/work/surf/morph-05.jpg" alt=""><img src="/work/surf/morph-06.jpg" alt=""></div></figure>
@@ -131,6 +132,9 @@ figure img.bare{background:none;border-radius:0}
 </main>
 <footer class="legal"><span><a class="co" href="https://supersmail.com" target="_blank" rel="noopener">© SUPERSMAIL GMBH</a></span><span><a href="/imprint">IMPRINT</a><a href="/privacy">PRIVACY</a></span></footer>
 <script>
+// the prototypes' frame grows to what it holds, also when they stack on a phone
+const pf=document.querySelector('.proto');
+if(pf){const fit=()=>{try{pf.style.height=(pf.contentDocument.querySelector('.wrap').offsetHeight+16)+'px'}catch(e){}};pf.addEventListener('load',()=>{fit();new ResizeObserver(fit).observe(pf.contentDocument.body)});addEventListener('resize',fit)}
 // a picture or clip that is not there yet leaves no empty frame behind
 document.querySelectorAll('figure img,figure video,.frames img').forEach(m=>m.addEventListener('error',()=>{const f=m.closest('.frames')?m:m.closest('figure');f.style.display='none'},{once:true}));
 </script>
