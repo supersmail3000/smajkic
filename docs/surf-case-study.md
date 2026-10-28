@@ -1,74 +1,117 @@
-# SURF — case study draft
+# SURF — case study (text of /work/surf, generated from public/work/surf.html)
+# SURF
 
-Page: /work/surf on smailsmajkic.com. The page sets everything lowercase, like the homepage.
-Assets: public/work/surf/ (stills + clips, see the list at the end).
-
----
-
-## SURF
 A browser for four people. Built in six days.
 
-**Team** Ante, Josip, Dominik, Smail
-**Role** concept, design and development
+**Role** Product idea, concept, design and development
+
+**Team** Ante, Josip, Dominik and me
+
+**Status** In daily use, ongoing
+
 **Platform** macOS, Swift on Chromium
-**Time** October 2026, ongoing
 
----
+[sidebar-docked.jpg]
 
-## The problem
-On October 22, 2026, The Browser Company announced that Arc stops working on December 22. Four people who live in Arc had two months to find another browser. We started our own the next morning.
+## THE STORY
 
-The rule from day one: Arc's best decisions, on an engine someone else keeps secure. No URL bar. The sidebar comes in at the edge. And one thing Arc never had: an agent that uses the same browser as you.
+Arc was where my work lived. 659 tabs, 21 pinned folders, years of it. On October 22, 2026, The Browser Company announced that Arc stops working on December 22.
 
-[sidebar-docked.png — the docked sidebar: Tiles, Pins, Groups]
+So the idea was not to find a new browser, but to build the one we wanted: Arc's best decisions, on an engine someone else keeps secure, plus one thing Arc never had. An agent that uses the same browser as you, as a second user.
 
-## My part
-Four people, no sign-off. Everyone builds, everyone ships. I took the parts you touch a hundred times a day and took them from concept to code: how the sidebar looks, moves and scales. 33 of the first 89 merged pull requests.
+- **Oct 22** Arc announces its end. The idea for SURF.
 
-Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it.
+- **Oct 23** Ante, Josip, Dominik and I on a call. What a browser for the four of us needs, written down as requirements. The first build runs that evening: one window, no URL bar, the sidebar at the edge.
 
-## Decisions
+- **Oct 24** I import my own Arc. SURF freezes. From then on, nothing may hang.
+
+- **Oct 25** Dominik and Ante move the engine from WebKit to Chromium, so the agent can drive it.
+
+- **Oct 28** SURF 0.2.0. The four of us use it every day.
+
+## THE TEAM
+
+Four people, working async and side by side. Nobody waits for a meeting and nobody signs off on anyone else's work. Everyone builds, everyone ships.
+
+What holds it together is writing. Every decision goes into the shared component docs with a name, a date and the reason, so whoever picks it up next knows why without asking. Every change is tried in the running app before it counts, not argued in text.
+
+Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it. I brought the product idea and took the parts you touch a hundred times a day from concept to code: how the sidebar looks, moves and scales.
+
+## DECISIONS
 
 ### 1. Nothing may hang in the first five minutes
-I imported my own Arc: 659 tabs, 21 pinned folders. SURF froze. The first five minutes decide whether someone switches, so that became a requirement: hold 1,000 tabs, open only what you look at, show progress from the first click. Folding a group of 143 tabs went from 780 ms to 130.
+
+My own Arc import froze SURF. The first five minutes decide whether someone switches, so that became a requirement: hold a thousand tabs, open only what you look at, show progress from the first click. Folding a big group went from most of a second to a blink.
 
 ### 2. One grid for everything
+
 Icons 14, buttons 24, rows 32. Type in five steps: 10, 12, 14, 16, 18. Spacing on 4 pt, the sidebar 12 from every edge. Text is centred by its capitals, not its box, and checked by measuring pixels in a screenshot, not by eye.
 
-[tiles.png / groups.png]
+[tiles.jpg]
+[groups.jpg]
 
 ### 3. Motion you don't notice
+
 The hover highlight slides from row to row, it never jumps. A folder's flap swings as the group opens. The first try at 180 ms felt abrupt, 280 ms felt right. A Cmd-clicked tab opens right below the one it came from, named by its link until it loads, and grows into its place instead of popping up.
 
+[hover.mp4]
+_The hover slides_
 [folder.mp4]
+_The folder swings_
 
 ### 4. The row becomes the tile
-The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. I asked for three clickable prototypes before writing any code: icons glide, two beats, or each row shrinking into its own tile. I picked the third. Each folder row shrinks into its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.
 
-[morph.mp4 + morph-01…06.png]
-[sidebar-rail.png · sidebar-hidden.png]
+The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. Before any production code, I built three clickable prototypes: A, the icons glide. B, each row shrinks into its own tile. C, two beats. I picked B: every folder row becomes its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.
+
+[prototypes.png]
+_The three prototypes, halfway through: icons glide, the row becomes the tile, two beats. B won._
+
+[morph.mp4]
+
+_In the app, at full speed, then four times slower._
+
+[morph-01.jpg]
+[morph-02.jpg]
+[morph-03.jpg]
+[morph-04.jpg]
+[morph-05.jpg]
+[morph-06.jpg]
+
+[sidebar-rail.jpg]
+_Rail_
+[sidebar-hidden.jpg]
+_Hidden. No URL bar, ever._
 
 ### 5. No extra step
+
 An empty window keeps the Wave open. A second click to get the field back is one too many.
 
-[wave.png / wave.mp4]
+[wave.mp4]
 
 ### 6. Explore: taste, kept
-Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. Claude reads it first, so a new chat doesn't meet my taste as a stranger.
 
-[explore.png]
+Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. The agent reads it first, so a new conversation doesn't meet my taste as a stranger.
 
-## How we work
-Prototype in the browser, pick, build, check in the running app. Every visual change counts only once it's seen there. Every decision goes into the component docs with a name and a date, so the next person knows why.
+[explore.jpg]
 
-## Outcome
-SURF 0.2.0 shipped on day six. The four of us use it every day. Arc has eight weeks left.
+## A NEW WAY OF WORKING
 
-[peek.png · capture.png · split.png]
+No handoff. Idea, prototype and production code come from the same person, with AI agents as the dev team. The designer doesn't hand over a file, the designer ships.
 
----
+When something is unclear, I make it clickable first and decide in the browser, not in a meeting. Then it gets built, checked frame by frame in the running app, and shipped, often the same day. Four people work like that in parallel, and the written decisions keep it one product.
 
-Open for Smail
-- Claude Code as the dev team: mention it in "How we work" or leave it out (homepage rule: AI as a tool, not a topic). Draft leaves it out.
-- "33 of the first 89": keep the number or drop it.
-- Is the page linked from LATEST WORK (SURF row, "READ →") or only by URL for now.
+Small and fast beats complete: a feature the four of us use every day beats five half-done ones.
+
+## OUTCOME
+
+SURF 0.2.0 shipped on day six. Arc has eight weeks left.
+
+[peek.jpg]
+_Peek_
+[split.jpg]
+_Split_
+
+[pins.jpg]
+_Pins_
+[capture.jpg]
+_Capture_

@@ -47,6 +47,10 @@ figcaption{color:#7d7d7d;margin-top:12px;max-width:640px}
 .frames img{border-radius:6px}
 figure img.bare{background:none;border-radius:0}
 .narrow{max-width:360px}
+/* the story as dated beats */
+.tl{list-style:none;margin:32px 0 0;padding:0;display:grid;gap:16px}
+.tl li{display:grid;grid-template-columns:96px 1fr;gap:24px}
+.tl b{font-weight:400;color:#fff}
 .narrow2{max-width:760px;align-items:start}
 .legal{display:flex;justify-content:space-between;padding:0 32px 32px;color:#5f5f5f}
 .legal a{color:#7d7d7d;margin-left:24px}.legal a:hover{color:#fff}.legal a.co{margin-left:0;color:inherit}
@@ -61,23 +65,31 @@ figure img.bare{background:none;border-radius:0}
 <h1>SURF</h1>
 <p class="lede">A browser for four people. Built in six days.</p>
 <dl class="facts">
-<div><dt>Role</dt><dd>Concept, design and development</dd></div>
+<div><dt>Role</dt><dd>Product idea, concept, design and development</dd></div>
 <div><dt>Team</dt><dd>Ante, Josip, Dominik and me</dd></div>
-<div><dt>Shipped</dt><dd>0.2.0 on day six, 33 of 89 PRs mine</dd></div>
+<div><dt>Status</dt><dd>In daily use, ongoing</dd></div>
 <div><dt>Platform</dt><dd>macOS, Swift on Chromium</dd></div>
 </dl>
 </section>
 <figure class="wide"><img src="/work/surf/sidebar-docked.jpg" alt="surf with the docked sidebar: tiles, pins and groups"></figure>
 <section class="col">
-<h2>THE PROBLEM</h2>
-<p>On October 22, 2026, The Browser Company announced that Arc stops working on December 22. Four people who live in Arc had two months to find another browser. We started our own the next morning.</p>
-<p>The rule from day one: Arc's best decisions, on an engine someone else keeps secure. No URL bar. The sidebar comes in at the edge. And one thing Arc never had: an agent that uses the same browser as you.</p>
-<h2>MY PART</h2>
-<p>Four people, no sign-off. Everyone builds, everyone ships. I took the parts you touch a hundred times a day and took them from concept to code: how the sidebar looks, moves and scales. 33 of the first 89 merged pull requests.</p>
-<p>Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it.</p>
+<h2>THE STORY</h2>
+<p>Arc was where my work lived. 659 tabs, 21 pinned folders, years of it. On October 22, 2026, The Browser Company announced that Arc stops working on December 22.</p>
+<p>So the idea was not to find a new browser, but to build the one we wanted: Arc's best decisions, on an engine someone else keeps secure, plus one thing Arc never had. An agent that uses the same browser as you, as a second user.</p>
+<ol class="tl">
+<li><b>Oct 22</b><span>Arc announces its end. The idea for SURF.</span></li>
+<li><b>Oct 23</b><span>Ante, Josip, Dominik and I on a call. What a browser for the four of us needs, written down as requirements. The first build runs that evening: one window, no URL bar, the sidebar at the edge.</span></li>
+<li><b>Oct 24</b><span>I import my own Arc. SURF freezes. From then on, nothing may hang.</span></li>
+<li><b>Oct 25</b><span>Dominik and Ante move the engine from WebKit to Chromium, so the agent can drive it.</span></li>
+<li><b>Oct 28</b><span>SURF 0.2.0. The four of us use it every day.</span></li>
+</ol>
+<h2>THE TEAM</h2>
+<p>Four people, working async and side by side. Nobody waits for a meeting and nobody signs off on anyone else's work. Everyone builds, everyone ships.</p>
+<p>What holds it together is writing. Every decision goes into the shared component docs with a name, a date and the reason, so whoever picks it up next knows why without asking. Every change is tried in the running app before it counts, not argued in text.</p>
+<p>Ante set the bar ("perfection, no compromises") and how the Wave springs open. Josip built Pins, Split and Capture. Dominik and Ante moved the engine to Chromium so the agent can drive it. I brought the product idea and took the parts you touch a hundred times a day from concept to code: how the sidebar looks, moves and scales.</p>
 <h2>DECISIONS</h2>
 <h3>1. Nothing may hang in the first five minutes</h3>
-<p>I imported my own Arc: 659 tabs, 21 pinned folders. SURF froze. The first five minutes decide whether someone switches, so that became a requirement: hold 1,000 tabs, open only what you look at, show progress from the first click. Folding a group of 143 tabs went from 780 ms to 130.</p>
+<p>My own Arc import froze SURF. The first five minutes decide whether someone switches, so that became a requirement: hold a thousand tabs, open only what you look at, show progress from the first click. Folding a big group went from most of a second to a blink.</p>
 <h3>2. One grid for everything</h3>
 <p>Icons 14, buttons 24, rows 32. Type in five steps: 10, 12, 14, 16, 18. Spacing on 4 pt, the sidebar 12 from every edge. Text is centred by its capitals, not its box, and checked by measuring pixels in a screenshot, not by eye.</p>
 </section>
@@ -89,7 +101,7 @@ figure img.bare{background:none;border-radius:0}
 <div class="wide pair narrow2"><figure><video src="/work/surf/hover.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption>The hover slides</figcaption></figure><figure><video src="/work/surf/folder.mp4" autoplay muted loop playsinline preload="metadata"></video><figcaption>The folder swings</figcaption></figure></div>
 <section class="col">
 <h3>4. The row becomes the tile</h3>
-<p>The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. I asked for three clickable prototypes before writing any code: icons glide, two beats, or each row shrinking into its own tile. I picked the third. Each folder row shrinks into its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.</p>
+<p>The sidebar has three modes: docked, rail, hidden. The switch between docked and rail was a cut. Before any production code, I built three clickable prototypes: A, the icons glide. B, each row shrinks into its own tile. C, two beats. I picked B: every folder row becomes its rail tile, the favorites merge into one card. Built, checked in the running app, shipped the same day.</p>
 </section>
 <figure class="wide"><img class="bare" src="/work/surf/prototypes.png" alt="three clickable prototypes of the sidebar turning into the rail"><figcaption>The three prototypes, halfway through: icons glide, the row becomes the tile, two beats. B won.</figcaption></figure>
 <figure class="wide"><video src="/work/surf/morph.mp4" autoplay muted loop playsinline preload="metadata"></video>
@@ -103,14 +115,16 @@ figure img.bare{background:none;border-radius:0}
 <figure class="wide"><video src="/work/surf/wave.mp4" poster="/work/surf/wave.jpg" autoplay muted loop playsinline preload="metadata"></video></figure>
 <section class="col">
 <h3>6. Explore: taste, kept</h3>
-<p>Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. Claude reads it first, so a new chat doesn't meet my taste as a stranger.</p>
+<p>Cmd+E keeps whatever is under the pointer: an image, a quote, a piece of code. Explore holds it at the right edge, with its source. The agent reads it first, so a new conversation doesn't meet my taste as a stranger.</p>
 </section>
 <figure class="wide"><img src="/work/surf/explore.jpg" alt="explore at the right edge, holding saved pieces"></figure>
 <section class="col">
-<h2>HOW WE WORK</h2>
-<p>Prototype in the browser, pick, build, check in the running app. Every visual change counts only once it's seen there. Every decision goes into the component docs with a name and a date, so the next person knows why.</p>
+<h2>A NEW WAY OF WORKING</h2>
+<p>No handoff. Idea, prototype and production code come from the same person, with AI agents as the dev team. The designer doesn't hand over a file, the designer ships.</p>
+<p>When something is unclear, I make it clickable first and decide in the browser, not in a meeting. Then it gets built, checked frame by frame in the running app, and shipped, often the same day. Four people work like that in parallel, and the written decisions keep it one product.</p>
+<p>Small and fast beats complete: a feature the four of us use every day beats five half-done ones.</p>
 <h2>OUTCOME</h2>
-<p>SURF 0.2.0 shipped on day six. The four of us use it every day. Arc has eight weeks left.</p>
+<p>SURF 0.2.0 shipped on day six. Arc has eight weeks left.</p>
 </section>
 <div class="wide pair"><figure><img src="/work/surf/peek.jpg" alt="peek: a link previewed above the page"><figcaption>Peek</figcaption></figure><figure><img src="/work/surf/split.jpg" alt="split: two tabs side by side"><figcaption>Split</figcaption></figure></div>
 <div class="wide pair"><figure><img src="/work/surf/pins.jpg" alt="pins: tabs that stay"><figcaption>Pins</figcaption></figure><figure><img src="/work/surf/capture.jpg" alt="capture"><figcaption>Capture</figcaption></figure></div>
