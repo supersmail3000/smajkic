@@ -295,8 +295,9 @@ function play() {
   const ms = Number(dur.value) * (slow.checked ? 4 : 1) * Math.abs(to - from || 1);
   const start = performance.now();
   // Linear clock: each variant applies its own curves to it.
-  const step = (now) => {
-    const k = clamp((now - start) / ms);
+  // performance.now(), not the frame's timestamp: inside a frame on another page the two clocks start at different times.
+  const step = () => {
+    const k = clamp((performance.now() - start) / ms);
     draw(lerp(from, to, k));
     if (k < 1) raf = requestAnimationFrame(step);
   };
