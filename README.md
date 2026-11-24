@@ -1,48 +1,44 @@
-# smailsmajkic.com — One-Pager
+# smailsmajkic.com
 
-Persönliche Seite von Smail Smajkic. Ein Pager, dunkel, textgetrieben — nach dem Muster der Portfolio-Analyse (keine Navigation, Hero → Arbeit → Kontakt).
+find the problem. shape the product. build the brand.
 
-**Stack:** Next.js (App Router) · Tailwind CSS v4 · shadcn/ui · Geist (Vercel, `geist`-Package)
+the source of smailsmajkic.com. one page, one object: a black chrome cube that reflects the page, melts as the page scrolls and takes a new shape for product, design and brand.
 
-## Lokal starten
+## stack
+
+- the homepage is one static file, `public/home.html`, with its own three.js scene
+- three.js r170, vendored under `public/vendor`, no bundler
+- next.js 16 for the imprint, the privacy page and the routing
+- geist light and geist pixel, self-hosted under `public/fonts`
+
+## run
 
 ```bash
 npm install
 npm run dev
 ```
 
-→ http://localhost:3000
+then open http://localhost:3000.
 
-## Deployen (Vercel, empfohlen)
+## structure
+
+```
+public/home.html     the homepage and its scene, served at /
+public/hdri/         the studio light the chrome reflects
+public/llms.txt      the facts, for language models
+app/imprint/         imprint, english and german
+app/privacy/         privacy, english and german
+app/layout.tsx       metadata for the next routes
+next.config.ts       rewrites, the www redirect, cache headers
+```
+
+## deploy
+
+vercel cli, no git integration. a push to main deploys nothing.
 
 ```bash
-npm i -g vercel
-vercel
+npx vercel deploy          # preview
+npx vercel deploy --prod   # smailsmajkic.com
 ```
 
-Danach im Vercel-Dashboard unter **Settings → Domains** die eigene Domain (smailsmajkic.com) hinzufügen und die angezeigten DNS-Einträge beim Domain-Anbieter setzen. Fertig — die Seite ist statisch, kein Server nötig.
-
-Alternativ: Repo auf GitHub pushen und bei vercel.com importieren.
-
-## Offene Punkte (TODO)
-
-- [ ] **Ein Projekt fehlt:** Im Mockup war zwischen Telefónica und HSE ein Projekt abgeschnitten (Beschreibung endet auf „… product development and reinforce brand coherence."). In `app/page.tsx` den Platzhalter `[Projektname ergänzen]` ersetzen.
-- [ ] **Impressum** (`app/imprint/page.tsx`): Adresse und Pflichtangaben ergänzen.
-- [ ] **Datenschutz** (`app/privacy/page.tsx`): Hosting-Anbieter-Passage vervollständigen.
-- [ ] **Projektlinks:** Sobald Case Studies auf supersmail.com stehen, in `app/page.tsx` die Projektnamen verlinken.
-
-## Struktur
-
-```
-app/
-  page.tsx          # der One-Pager (Inhalte + Projektliste als Array)
-  layout.tsx        # Geist Sans/Mono, Metadata
-  globals.css       # shadcn-Design-Tokens (dark-only)
-  imprint/          # Impressum (Platzhalter)
-  privacy/          # Datenschutz (Platzhalter)
-components/ui/      # shadcn-Komponenten (Button, Separator)
-lib/utils.ts        # cn()-Helper
-components.json     # shadcn-Konfiguration
-```
-
-Hinweis: Die shadcn-Komponenten wurden manuell angelegt (Registry war aus der Build-Umgebung nicht erreichbar), entsprechen aber dem CLI-Output — `npx shadcn@latest add <component>` funktioniert lokal ganz normal, um weitere Komponenten zu ergänzen.
+© supersmail gmbh. all rights reserved.
